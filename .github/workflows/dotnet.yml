@@ -23,8 +23,6 @@ jobs:
       with:
         distribution: 'dragonwell'
         java-version: '17'
-    - name: Restore dependencies
-      run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
     - name: 上传构建文件
