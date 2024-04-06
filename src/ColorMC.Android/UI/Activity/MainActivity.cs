@@ -38,6 +38,8 @@ public class MainActivity : AvaloniaMainActivity<App>
 {
     public static readonly Dictionary<string, GameRender> Games = [];
     public static string NativeLibDir;
+    public static string CacheDir;
+    public static string ExternalFilesDir;
 
     protected override void OnDestroy()
     {
@@ -48,36 +50,26 @@ public class MainActivity : AvaloniaMainActivity<App>
 
     protected override void OnCreate(Bundle savedInstanceState)
     {
-        ColorMCCore.PhoneGameLaunch = PhoneGameLaunch;
-        ColorMCCore.PhoneJvmInstall = PhoneJvmInstall;
-        ColorMCCore.PhoneStartJvm = PhoneStartJvm;
         ColorMCCore.PhoneReadFile = PhoneReadFile;
-        ColorMCCore.PhoneGetDataDir = PhoneGetDataDir;
-        ColorMCCore.PhoneJvmRun = PhoneJvmRun;
         ColorMCCore.PhoneOpenUrl = PhoneOpenUrl;
+        ColorMCCore.PhoneGameLaunch = PhoneGameLaunch;
 
         ColorMCGui.PhoneGetSetting = PhoneGetSetting;
-        ColorMCGui.PhoneGetFrp = PhoneGetFrp;
+
+        CacheDir = ApplicationContext!.CacheDir!.AbsolutePath!;
+        NativeLibDir = ApplicationInfo!.NativeLibraryDir!;
+        ExternalFilesDir = ApplicationContext.GetExternalFilesDir(null)!.AbsolutePath;
+
+        ColorMCAndroid.Init();
 
         ColorMCGui.StartPhone(GetExternalFilesDir(null)!.AbsolutePath + "/");
         PhoneConfigUtils.Init(ColorMCCore.BaseDir);
-
-        NativeLibDir = ApplicationInfo!.NativeLibraryDir!;
 
         base.OnCreate(savedInstanceState);
 
         ResourceUnPack.StartUnPack(this);
 
         BackRequested += MainActivity_BackRequested;
-    }
-
-    private string PhoneGetFrp(FrpType type)
-    {
-        if (type == FrpType.OpenFrp)
-        {
-            return ApplicationInfo!.NativeLibraryDir + "/" + "libfrpc_openfrp.so";
-        }
-        return ApplicationInfo!.NativeLibraryDir + "/" + "libfrpc.so";
     }
 
     private void MainActivity_BackRequested(object? sender, AndroidBackRequestedEventArgs e)
@@ -92,68 +84,6 @@ public class MainActivity : AvaloniaMainActivity<App>
     public Control PhoneGetSetting()
     {
         return new PhoneControl(this);
-    }
-
-    public Process PhoneStartJvm(string file)
-    {
-        var info = new ProcessStartInfo(NativeLibDir + "/libcolormcnative.so");
-        var path = Path.GetFullPath(new FileInfo(file).Directory.Parent.FullName);
-
-        var path1 = JavaUnpack.GetLibPath(path);
-
-        var temp1 = Os.Getenv("PATH");
-
-        var LD_LIBRARY_PATH = $"{path1}/{(File.Exists($"{path1}/server/libjvm.so") ? "server" : "client")}"
-            + $":{path}:{path1}/jli:{path1}:"
-            + "/system/lib64:/vendor/lib64:/vendor/lib64/hw:"
-            + NativeLibDir;
-
-        info.Environment.Add("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
-        info.Environment.Add("PATH", path1 + "/bin:" + temp1);
-        info.Environment.Add("JAVA_HOME", path);
-        info.Environment.Add("NATIVE_DIR", NativeLibDir);
-        info.Environment.Add("HOME", ColorMCCore.BaseDir);
-        info.Environment.Add("TMPDIR", ApplicationContext.CacheDir.AbsolutePath);
-        info.ArgumentList.Add("-Djava.home=" + path);
-
-        var p = new Process
-        {
-            StartInfo = info,
-            EnableRaisingEvents = true
-        };
-        return p;
-    }
-
-    public Process PhoneJvmRun(GameSettingObj obj, JavaInfo jvm, string dir, List<string> arg, Dictionary<string, string> env)
-    {
-        var p = PhoneStartJvm(jvm.Path);
-
-        foreach (var item in env)
-        {
-            p.StartInfo.Environment.Add(item.Key, item.Value);
-        }
-
-        p.StartInfo.WorkingDirectory = dir;
-        p.StartInfo.ArgumentList.Add("-Djava.io.tmpdir=" + ApplicationContext.CacheDir.AbsolutePath);
-        p.StartInfo.ArgumentList.Add("-Djna.boot.library.path=" + NativeLibDir);
-        p.StartInfo.ArgumentList.Add("-Duser.home=" + ApplicationContext.GetExternalFilesDir(null).AbsolutePath);
-        p.StartInfo.ArgumentList.Add("-Duser.language=" + Java.Lang.JavaSystem.GetProperty("user.language"));
-        p.StartInfo.ArgumentList.Add("-Dos.name=Linux");
-        p.StartInfo.ArgumentList.Add("-Dos.version=Android-" + ColorMCCore.Version);
-        p.StartInfo.ArgumentList.Add("-Duser.timezone=" + Java.Util.TimeZone.Default.ID);
-        arg.ForEach(p.StartInfo.ArgumentList.Add);
-
-        return p;
-    }
-
-    public void PhoneJvmInstall(Stream stream, string file, ColorMCCore.ZipUpdate? zip)
-    {
-        new JavaUnpack() { ZipUpdate = zip }.Unpack(stream, file);
-    }
-
-    public string PhoneGetDataDir()
-    {
-        return AppContext.BaseDirectory;
     }
 
     public Stream? PhoneReadFile(string file)
@@ -178,22 +108,6 @@ public class MainActivity : AvaloniaMainActivity<App>
         StartActivity(new Intent(Intent.ActionView, uri));
     }
 
-    /// <summary>
-    /// 保持splash不开启
-    /// </summary>
-    /// <param name="obj">游戏实例</param>
-    private void ConfigSet(GameSettingObj obj)
-    {
-        //var dir = obj.GetConfigPath();
-        //Directory.CreateDirectory(dir);
-        //var file = dir + "splash.properties";
-        //string data = PathHelper.ReadText(file) ?? "enabled=true";
-        //if (data.Contains("enabled=true"))
-        //{
-        //    PathHelper.WriteText(file, data.Replace("enabled=true", "enabled=false"));
-        //}
-    }
-
     public void Setting()
     {
         //var mainIntent = new Intent();
@@ -202,73 +116,12 @@ public class MainActivity : AvaloniaMainActivity<App>
     }
 
     public Process PhoneGameLaunch(GameSettingObj obj, JavaInfo jvm, List<string> list,
-        Dictionary<string, string> env)
+       Dictionary<string, string> env)
     {
-        ConfigSet(obj);
-
-        var version = VersionPath.GetVersion(obj.Version)!;
-        string dir = obj.GetLogPath();
-        if (!Directory.Exists(dir))
-        {
-            Directory.CreateDirectory(dir);
-        }
-
-        var file = obj.GetOptionsFile();
-        if (!File.Exists(file))
-        {
-            File.WriteAllBytes(file, Resource1.options);
-        }
-
-        var native = ApplicationInfo!.NativeLibraryDir;
-        var classpath = false;
-        for (int a = 0; a < list.Count; a++)
-        {
-            list[a] = list[a].Replace("%natives_directory%", native);
-            if (list[a].StartsWith("-cp"))
-            {
-                classpath = true;
-                continue;
-            }
-            if (classpath)
-            {
-                classpath = false;
-
-                string lwjgl = ResourceUnPack.ComponentsDir + "/lwjgl3/lwjgl-glfw-classes.jar";
-
-                if (PhoneConfigUtils.Config.LwjglVk)
-                {
-                    lwjgl += ":" + ResourceUnPack.ComponentsDir + "/lwjgl3/lwjgl-vulkan.jar" + ":"
-                        + ResourceUnPack.ComponentsDir + "/lwjgl3/lwjgl-vulkan-native.jar";
-                }
-
-                list[a] = lwjgl + ":" + list[a];
-            }
-        }
-
         var render = GameRender.RenderType.gl4es;
-
-        var list1 = new List<string>();
+        ColorMCAndroid.ConfigSet(obj);
+        ColorMCAndroid.ReplaceClassPath(obj, list);
         var display = AndroidHelper.GetDisplayMetrics(this);
-        list1.Add("-Dorg.lwjgl.vulkan.libname=libvulkan.so");
-        list1.Add("-Dglfwstub.initEgl=false");
-        list1.Add("-Dlog4j2.formatMsgNoLookups=true");
-        list1.Add("-Dfml.earlyprogresswindow=false");
-        list1.Add("-Dloader.disable_forked_guis=true");
-        list1.Add($"-Dorg.lwjgl.opengl.libname={render.GetFileName()}");
-        ResourceUnPack.GetCacioJavaArgs(list1, display.WidthPixels, display.HeightPixels, jvm.MajorVersion == 8);
-
-        list1.AddRange(list);
-
-        var p = PhoneJvmRun(obj, jvm, obj.GetGamePath(), list1, env);
-
-        p.StartInfo.Environment.Add("glfwstub.windowWidth", $"{display.WidthPixels}");
-        p.StartInfo.Environment.Add("glfwstub.windowHeight", $"{display.HeightPixels}");
-        p.StartInfo.Environment.Add("ANDROID_VERSION", $"{(int)Build.VERSION.SdkInt}");
-        if (CheckHelpers.IsGameVersionV2(version))
-        {
-            p.StartInfo.Environment.Add("GAME_V2", "1");
-        }
-
         Bitmap bitmap;
         var image = obj.GetIconFile();
         if (File.Exists(image))
@@ -279,8 +132,10 @@ public class MainActivity : AvaloniaMainActivity<App>
         {
             bitmap = BitmapFactory.DecodeResource(Resources, Resource.Drawable.icon);
         }
+
+        var p = ColorMCAndroid.BuildRunProcess(render, display, list, obj, jvm, env, false);
         var game = new GameRender(ApplicationContext.FilesDir.AbsolutePath, obj.UUID, obj.Name,
-            bitmap, p, render);
+           bitmap, p, render);
         game.GameReady += Game_GameReady;
 
         Games.Remove(obj.UUID);
@@ -293,7 +148,7 @@ public class MainActivity : AvaloniaMainActivity<App>
 
         p.Exited += (a, b) =>
         {
-            if(Games.Remove(obj.UUID, out var game))
+            if (Games.Remove(obj.UUID, out var game))
             {
                 game.Close();
             }
