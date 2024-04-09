@@ -4,8 +4,8 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Widget;
 using AndroidX.AppCompat.App;
+using ColorMC.Android.GameButton;
 using ColorMC.Android.GLRender;
-using ColorMC.Android.UI.GameButton;
 using System.Linq;
 using AlertDialog = AndroidX.AppCompat.App.AlertDialog;
 
@@ -115,7 +115,7 @@ public class GameActivity : AppCompatActivity, IButtonFuntion
     {
         base.OnNewIntent(intent);
         var uuid = intent?.GetStringExtra("GAME_UUID");
-        if (uuid != null && 
+        if (uuid != null &&
             MainActivity.Games.TryGetValue(uuid, out var game))
         {
             game.GameClose = GameClose;
@@ -131,11 +131,11 @@ public class GameActivity : AppCompatActivity, IButtonFuntion
 
     public void NextGroup()
     {
-        
+
     }
 
     public void LastGroup()
     {
-        
+
     }
 }

@@ -1,30 +1,22 @@
-﻿using ColorMC.Core.Objs;
-using ColorMC.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using System.IO;
+﻿using Android.OS;
 using Android.Systems;
-using ColorMC.Android.UI.Activity;
-using Android.Content.PM;
-using ColorMC.Gui.Objs;
-using ColorMC.Gui;
-using Android.Content.Res;
-using Android.Graphics;
-using Android.OS;
-using Avalonia.Threading;
+using Android.Util;
 using ColorMC.Android.components;
 using ColorMC.Android.GLRender;
+using ColorMC.Android.UI.Activity;
+using ColorMC.Core;
 using ColorMC.Core.Helpers;
 using ColorMC.Core.LaunchPath;
-using Process = System.Diagnostics.Process;
+using ColorMC.Core.Objs;
+using ColorMC.Gui;
+using ColorMC.Gui.Objs;
+using Java.Net;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using Path = System.IO.Path;
-using Java.Util;
-using Android.Util;
-using static ColorMC.Core.Objs.Minecraft.GameArgObj.Arguments;
+using Process = System.Diagnostics.Process;
 
 namespace ColorMC.Android;
 
@@ -36,8 +28,17 @@ public static class ColorMCAndroid
         ColorMCCore.PhoneStartJvm = PhoneStartJvm;
         ColorMCCore.PhoneGetDataDir = PhoneGetDataDir;
         ColorMCCore.PhoneJvmRun = PhoneJvmRun;
+        ColorMCCore.GetFreePort = GetFreePort;
 
         ColorMCGui.PhoneGetFrp = PhoneGetFrp;
+    }
+
+    private static int GetFreePort()
+    {
+        var serverSocket = new ServerSocket(0);
+        int port = serverSocket.LocalPort;
+        serverSocket.Close();
+        return port;
     }
 
     private static string PhoneGetFrp(FrpType type)
@@ -61,7 +62,8 @@ public static class ColorMCAndroid
 
     public static Process PhoneStartJvm(string file)
     {
-        var info = new ProcessStartInfo(MainActivity.NativeLibDir + "/libcolormcnative.so");
+        //var info = new ProcessStartInfo(MainActivity.NativeLibDir + "/libcolormcnative.so");
+        var info = new ProcessStartInfo(file);
         var path = Path.GetFullPath(new FileInfo(file).Directory.Parent.FullName);
 
         var path1 = JavaUnpack.GetLibPath(path);
@@ -185,7 +187,7 @@ public static class ColorMCAndroid
 
         if (cacio)
         {
-            ResourceUnPack.GetCacioJavaArgs(list1, display.WidthPixels, display.HeightPixels, 
+            ResourceUnPack.GetCacioJavaArgs(list1, display.WidthPixels, display.HeightPixels,
                 jvm.MajorVersion == 8);
         }
 

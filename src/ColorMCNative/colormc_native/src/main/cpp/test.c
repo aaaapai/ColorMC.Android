@@ -7,6 +7,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <dirent.h>
+#include <stdbool.h>
 
 #define FULL_VERSION "1.8.0-internal"
 #define DOT_VERSION "1.8"

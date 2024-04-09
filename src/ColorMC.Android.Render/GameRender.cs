@@ -1,4 +1,5 @@
 ﻿using Android.Graphics;
+using Android.Util;
 using System.Diagnostics;
 using System.Net.Sockets;
 
@@ -33,7 +34,7 @@ public class GameSock(string socketPath)
         {
             _socket.Connect(_socketPath);
 
-            RenderLog.Info("Game Sock", "Connected to the server.");
+            Log.Info("Game Sock", "Connected to the server.");
 
             new Thread(Read).Start();
 
@@ -41,7 +42,7 @@ public class GameSock(string socketPath)
         }
         catch (Exception e)
         {
-            RenderLog.Info("Game Sock", "connect fail wait...");
+            Log.Info("Game Sock", "connect fail wait...");
         }
 
         return false;
@@ -265,7 +266,7 @@ public class GameRender
         {
             TexId = GLHelper.CreateTexture();
         }
-        HaveTexture = RenderNative.BindTexture(TexId, buffer, 
+        HaveTexture = RenderNative.BindTexture(TexId, buffer,
             out var width, out var height, out texture);
         GameWidth = (ushort)width;
         GameHeight = (ushort)height;

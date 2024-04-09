@@ -5,7 +5,7 @@ using Android.Widget;
 using Avalonia.Layout;
 using System;
 
-namespace ColorMC.Android.UI.GameButton;
+namespace ColorMC.Android.GameButton;
 
 public class ButtonView : View
 {
@@ -117,7 +117,7 @@ public class ButtonView : View
         }
         else if (_data.Type == ButtonData.ButtonType.Setting)
         {
-            bitmap = BitmapFactory.DecodeResource(Resources, Resource.Drawable.icon);
+            bitmap = BitmapFactory.DecodeResource(Resources, _Microsoft.Android.Resource.Designer.ResourceConstant.Drawable.icon);
         }
 
         if (bitmap != null)

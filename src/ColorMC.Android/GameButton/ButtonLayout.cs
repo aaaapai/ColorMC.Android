@@ -1,12 +1,7 @@
 ﻿using Avalonia.Layout;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ColorMC.Android.UI.GameButton;
+namespace ColorMC.Android.GameButton;
 
 public record ButtonLayout
 {

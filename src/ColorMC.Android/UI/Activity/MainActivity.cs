@@ -4,24 +4,19 @@ using Android.Content.PM;
 using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
-using Android.Systems;
+using Android.Util;
 using Avalonia.Android;
 using Avalonia.Controls;
 using Avalonia.Threading;
-using ColorMC.Android.components;
 using ColorMC.Android.GLRender;
 using ColorMC.Core;
-using ColorMC.Core.Helpers;
 using ColorMC.Core.LaunchPath;
 using ColorMC.Core.Objs;
 using ColorMC.Gui;
-using ColorMC.Gui.Objs;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Path = System.IO.Path;
 using Process = System.Diagnostics.Process;
 using Uri = Android.Net.Uri;
 
@@ -190,12 +185,12 @@ public class MainActivity : AvaloniaMainActivity<App>
 
     private void P_ErrorDataReceived(object sender, DataReceivedEventArgs e)
     {
-        RenderLog.Error("Pipe", e.Data ?? "null");
+        Log.Error("Game Pipe", e.Data ?? "null");
     }
 
     private void P_OutputDataReceived(object sender, DataReceivedEventArgs e)
     {
-        RenderLog.Info("Pipe", e.Data ?? "null");
+        Log.Info("Game Pipe", e.Data ?? "null");
     }
 
     private void Game_GameReady(string uuid)

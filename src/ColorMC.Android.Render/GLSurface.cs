@@ -1,6 +1,5 @@
 ﻿using Android.Content;
 using Android.Opengl;
-using Android.OS;
 using Android.Util;
 using Android.Views;
 using Javax.Microedition.Khronos.Opengles;
@@ -9,7 +8,6 @@ namespace ColorMC.Android.GLRender;
 
 public class GLSurface : GLSurfaceView, ISurfaceHolderCallback, GLSurfaceView.IRenderer, View.IOnTouchListener
 {
-    private readonly TapDetector _singleTapDetector;
     private readonly List<GameRender> displayList = [];
 
     private QuadRenderer qrender;
@@ -20,7 +18,6 @@ public class GLSurface : GLSurfaceView, ISurfaceHolderCallback, GLSurfaceView.IR
 
     public GLSurface(Context? context, DisplayMetrics display) : base(context)
     {
-        _singleTapDetector = new(1, TapDetector.DelectionMethodBoth, display);
         SetEGLContextClientVersion(3);
         SetRenderer(this);
         SetOnTouchListener(this);
@@ -75,7 +72,7 @@ public class GLSurface : GLSurfaceView, ISurfaceHolderCallback, GLSurfaceView.IR
                     out renderWidth, out renderHeight);
             }
         }
-        else if(NowGame.IsClose)
+        else if (NowGame.IsClose)
         {
             displayList.Remove(NowGame);
         }
@@ -167,17 +164,14 @@ public class GLSurface : GLSurfaceView, ISurfaceHolderCallback, GLSurfaceView.IR
                 return false;
             }
             //One android click = one MC click
-            if (_singleTapDetector.OnTouchEvent(e))
-            {
-                NowGame.MouseEvent(LwjglKeycode.GLFW_MOUSE_BUTTON_LEFT, true);
+            NowGame.MouseEvent(LwjglKeycode.GLFW_MOUSE_BUTTON_LEFT, true);
 
-                Task.Run(() =>
-                {
-                    Thread.Sleep(100);
-                    NowGame.MouseEvent(LwjglKeycode.GLFW_MOUSE_BUTTON_LEFT, false);
-                });
-                return true;
-            }
+            Task.Run(() =>
+            {
+                Thread.Sleep(100);
+                NowGame.MouseEvent(LwjglKeycode.GLFW_MOUSE_BUTTON_LEFT, false);
+            });
+            return true;
         }
 
         return true;

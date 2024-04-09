@@ -49,9 +49,8 @@ public class QuadRenderer
         "  gl_FragColor = texture2D(s_texture, vTexCoord);\n" +
         "}";
 
-    private readonly ShortBuffer _vertexIndexBuffer;
     private readonly FloatBuffer _vertexBuffer, _vertexBufferY, _uvBuffer;
-    private readonly int _program, _positionHandle, _texCoordHandle, _frameBuffer;
+    private readonly int _program, _positionHandle, _texCoordHandle;
 
     public QuadRenderer()
     {
@@ -103,7 +102,8 @@ public class QuadRenderer
         GLES20.GlVertexAttribPointer(_texCoordHandle, 2, GLES20.GlFloat, false, 0, _uvBuffer);
 
         // Calculate viewport based on fill and scale parameters
-        int x = 0, y = 0;
+        int x;
+        int y;
         if (type == GameRender.DisplayType.Scale)
         {
             // Scale to full screen while maintaining aspect ratio

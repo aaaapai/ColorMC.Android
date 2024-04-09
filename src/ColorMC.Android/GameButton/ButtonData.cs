@@ -1,13 +1,6 @@
-﻿using Avalonia;
-using Avalonia.Layout;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Avalonia.Layout;
 
-namespace ColorMC.Android.UI.GameButton;
+namespace ColorMC.Android.GameButton;
 
 public record MarginData
 {
@@ -18,7 +11,7 @@ public record MarginData
 
     public MarginData() { }
 
-    public MarginData(int value) 
+    public MarginData(int value)
     {
         Left = value;
         Top = value;
@@ -26,7 +19,7 @@ public record MarginData
         Bottom = value;
     }
 
-    public MarginData(int left, int top, int right,int bottom) 
+    public MarginData(int left, int top, int right, int bottom)
     {
         Left = left;
         Top = top;

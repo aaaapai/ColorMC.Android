@@ -3,14 +3,15 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0-android</TargetFramework>
     <Nullable>enable</Nullable>
-    <ApplicationId>coloryr.colormc.android</ApplicationId>
-    <ApplicationVersion>34</ApplicationVersion>
-    <ApplicationDisplayVersion>23.2023.1211</ApplicationDisplayVersion>
+    <ApplicationId>coloryr.colormc2.android</ApplicationId>
+    <ApplicationVersion>35</ApplicationVersion>
+    <ApplicationDisplayVersion>24.4.7</ApplicationDisplayVersion>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
     <AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
     <SupportedOSPlatformVersion>28.0</SupportedOSPlatformVersion>
     <IsPublishable>True</IsPublishable>
-	<RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>
+	<RuntimeIdentifiers>android-x64</RuntimeIdentifiers>
+	<!--<RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>-->
 	<AndroidManifestMerger>manifestmerger.jar</AndroidManifestMerger>
   </PropertyGroup>
 
@@ -59,7 +60,7 @@
     <Debugger>Xamarin</Debugger>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
-    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
     <IsTrimmable>True</IsTrimmable>
     <IsAotCompatible>True</IsAotCompatible>
   </PropertyGroup>
@@ -78,7 +79,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia.Android" Version="11.0.7" />
+    <PackageReference Include="Avalonia.Android" Version="11.0.10" />
     <PackageReference Include="Xamarin.AndroidX.Activity" Version="1.8.1.1" />
     <PackageReference Include="Xamarin.AndroidX.AppCompat" Version="1.6.1.6" />
     <PackageReference Include="Xamarin.AndroidX.Core" Version="1.12.0.3" />
@@ -89,11 +90,8 @@
   </ItemGroup>	
 
   <ItemGroup>
+    <ProjectReference Include="..\..\ColorMC\src\ColorMC.Gui\ColorMC.Gui.csproj" />
     <ProjectReference Include="..\ColorMC.Android.Render\ColorMC.Android.GLRender.csproj" />
-    <ProjectReference Include="..\ColorMC\Live2DCSharpSDK\Live2DCSharpSDK.App\Live2DCSharpSDK.App.csproj" />
-    <ProjectReference Include="..\ColorMC\Live2DCSharpSDK\Live2DCSharpSDK.Framework\Live2DCSharpSDK.Framework.csproj" />
-    <ProjectReference Include="..\ColorMC\src\ColorMC.Core\ColorMC.Core.csproj" />
-    <ProjectReference Include="..\ColorMC\src\ColorMC.Gui\ColorMC.Gui.csproj" />
   </ItemGroup>	
 
   <ItemGroup>

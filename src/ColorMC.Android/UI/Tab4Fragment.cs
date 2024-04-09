@@ -31,7 +31,7 @@ public class Tab4Fragment : Fragment
             name.Text = item.Name;
             image.SetImageBitmap(item.Icon);
 
-            item1.Click += (a, b)=> 
+            item1.Click += (a, b) =>
             {
                 Tabs.SetGame(item);
             };
