@@ -234,72 +234,69 @@ public class ButtonEditDialog
     private void SetColor()
     {
         // 尝试使用反射创建ColorPickerDialog.Builder的实例并调用方法
-        try
-        {
-            // 加载ColorPickerDialog.Builder类
-            Class builderClass = Class.ForName("com.yourlibrary.ColorPickerDialog$Builder");
-            Class builderClass = Class.ForName("com.yourlibrary.ColorPickerDialog$Builder");
-            Class builderClass = Class.ForName("com.yourlibrary.ColorPickerDialog$Builder");
-            Class builderClass = Class.ForName("com.yourlibrary.ColorPickerDialog$Builder");
+        //try
+        //{
+        //    // 加载ColorPickerDialog.Builder类
+        //    Class builderClass = Class.ForName("com.yourlibrary.ColorPickerDialog$Builder");
 
-            // 获取构造函数，假设它有一个Context类型的参数
-            Constructor constructor = builderClass.GetConstructor(Class.FromType(typeof(Context)));
+        //    // 获取构造函数，假设它有一个Context类型的参数
+        //    Constructor constructor = builderClass.GetConstructor(Class.FromType(typeof(Context)));
 
-            // 创建实例
-            Java.Lang.Object builderInstance = constructor.NewInstance(_context);
+        //    // 创建实例
+        //    Java.Lang.Object builderInstance = constructor.NewInstance(_context);
 
-            // 以下为调用方法的示例
-            // setTitle
-            Method setTitleMethod = builderClass.GetMethod("setTitle", Class.FromType(typeof(string)));
-            setTitleMethod.Invoke(builderInstance, "ColorPicker Dialog");
+        //    // 以下为调用方法的示例
+        //    // setTitle
+        //    Method setTitleMethod = builderClass.GetMethod("setTitle", Class.FromType(typeof(string)));
+        //    setTitleMethod.Invoke(builderInstance, "ColorPicker Dialog");
 
-            // setPreferenceName
-            Method setPreferenceNameMethod = builderClass.GetMethod("setPreferenceName", Class.FromType(typeof(string)));
-            setPreferenceNameMethod.Invoke(builderInstance, "MyColorPickerDialog");
+        //    // setPreferenceName
+        //    Method setPreferenceNameMethod = builderClass.GetMethod("setPreferenceName", Class.FromType(typeof(string)));
+        //    setPreferenceNameMethod.Invoke(builderInstance, "MyColorPickerDialog");
 
-            // setPositiveButton（假设该方法无参数）
-            Method setPositiveButtonMethod = builderClass.GetMethod("setPositiveButton", );
-            setPositiveButtonMethod.Invoke(builderInstance);
+        //    // setPositiveButton（假设该方法无参数）
+        //    Method setPositiveButtonMethod = builderClass.GetMethod("setPositiveButton", );
+        //    setPositiveButtonMethod.Invoke(builderInstance);
 
-            // setNegativeButton（假设该方法无参数）
-            Method setNegativeButtonMethod = builderClass.GetMethod("setNegativeButton");
-            setNegativeButtonMethod.Invoke(builderInstance);
+        //    // setNegativeButton（假设该方法无参数）
+        //    Method setNegativeButtonMethod = builderClass.GetMethod("setNegativeButton");
+        //    setNegativeButtonMethod.Invoke(builderInstance);
 
-            // attachAlphaSlideBar
-            Method attachAlphaSlideBarMethod = builderClass.GetMethod("attachAlphaSlideBar", Class.FromType(typeof(bool)));
-            attachAlphaSlideBarMethod.Invoke(builderInstance, true);
+        //    // attachAlphaSlideBar
+        //    Method attachAlphaSlideBarMethod = builderClass.GetMethod("attachAlphaSlideBar", Class.FromType(typeof(bool)));
+        //    attachAlphaSlideBarMethod.Invoke(builderInstance, true);
 
-            // attachBrightnessSlideBar
-            Method attachBrightnessSlideBarMethod = builderClass.GetMethod("attachBrightnessSlideBar", Class.FromType(typeof(bool)));
-            attachBrightnessSlideBarMethod.Invoke(builderInstance, true);
+        //    // attachBrightnessSlideBar
+        //    Method attachBrightnessSlideBarMethod = builderClass.GetMethod("attachBrightnessSlideBar", Class.FromType(typeof(bool)));
+        //    attachBrightnessSlideBarMethod.Invoke(builderInstance, true);
 
-            // setBottomSpace
-            Method setBottomSpaceMethod = builderClass.GetMethod("setBottomSpace", Class.FromType(typeof(int)));
-            setBottomSpaceMethod.Invoke(builderInstance, 12);
+        //    // setBottomSpace
+        //    Method setBottomSpaceMethod = builderClass.GetMethod("setBottomSpace", Class.FromType(typeof(int)));
+        //    setBottomSpaceMethod.Invoke(builderInstance, 12);
 
-            // show（假设该方法无参数）
-            Method showMethod = builderClass.GetMethod("show");
-            showMethod.Invoke(builderInstance);
-        }
-        catch (ClassNotFoundException e)
-        {
-            // 处理类未找到异常
-        }
-        catch (NoSuchMethodException e)
-        {
-            // 处理方法未找到异常
-        }
-        catch (InvocationTargetException e)
-        {
-            // 处理调用目标异常
-        }
-        catch (IllegalAccessException e)
-        {
-            // 处理非法访问异常
-        }
-        catch (InstantiationException e)
-        {
-            // 处理实例化异常
-        }
+        //    // show（假设该方法无参数）
+        //    Method showMethod = builderClass.GetMethod("show");
+        //    showMethod.Invoke(builderInstance);
+        //}
+        //catch (ClassNotFoundException e)
+        //{
+        //    // 处理类未找到异常
+        //}
+        //catch (NoSuchMethodException e)
+        //{
+        //    // 处理方法未找到异常
+        //}
+        //catch (InvocationTargetException e)
+        //{
+        //    // 处理调用目标异常
+        //}
+        //catch (IllegalAccessException e)
+        //{
+        //    // 处理非法访问异常
+        //}
+        //catch (InstantiationException e)
+        //{
+        //    // 处理实例化异常
+        //}
     }
 }

@@ -42,21 +42,20 @@ public class GameActivity : AppCompatActivity, IButtonFuntion
 
         var display = AndroidHelper.GetDisplayMetrics(this);
 
-        view = new GLSurface(ApplicationContext, display);
-        FindViewById<RelativeLayout>(Resource.Id.surface_view)!
-            .AddView(view);
         buttonTool = FindViewById<RelativeLayout>(Resource.Id.button_tool)!;
         button1 = FindViewById<Button>(Resource.Id.button1)!;
         button1.Click += Button1_Click;
 
         if (Intent?.GetBooleanExtra("EDIT_LAYOUT", false) == true)
         {
+            button1.Visibility = ViewStates.Visible;
             isEdit = true;
             ShowLayoutList();
             return;
         }
         else if (Intent?.GetBooleanExtra("EDIT_GROUP", false) == true)
         {
+            button1.Visibility = ViewStates.Visible;
             isEdit = true;
             ShowGroupList();
             return;
@@ -66,6 +65,10 @@ public class GameActivity : AppCompatActivity, IButtonFuntion
         if (uuid != null
             && MainActivity.Games.TryGetValue(uuid, out var game))
         {
+            view = new GLSurface(ApplicationContext, display);
+            FindViewById<RelativeLayout>(Resource.Id.surface_view)!
+                .AddView(view);
+
             game.GameClose = GameClose;
             view.SetGame(game);
         }
@@ -73,7 +76,7 @@ public class GameActivity : AppCompatActivity, IButtonFuntion
 
     private void Button1_Click(object? sender, EventArgs e)
     {
-        
+        ShowLayoutList();
     }
 
     public void ShowLayoutList()
@@ -115,7 +118,7 @@ public class GameActivity : AppCompatActivity, IButtonFuntion
 
     public override void OnBackPressed()
     {
-        if (view.NowGame?.IsClose == false)
+        if (view?.NowGame?.IsClose == false)
         {
             _ = new AlertDialog.Builder(this)!
                 .SetMessage(Resource.String.game_info1)!

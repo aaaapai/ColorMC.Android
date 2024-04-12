@@ -107,5 +107,6 @@ tasks.named("renameFiles").configure {
 }
 
 dependencies {
-
+    implementation "com.github.skydoves:colorpickerview:2.3.0"
+    implementation group: 'com.github.duanhong169', name: 'colorpicker', version: '1.1.6'
 }

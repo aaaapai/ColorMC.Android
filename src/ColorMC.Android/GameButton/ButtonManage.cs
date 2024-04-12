@@ -48,7 +48,7 @@ public static class ButtonManage
                         {
                             continue;
                         }
-                        group.Layouts ??= new();
+                        group.Layouts ??= [];
                         if (!ButtonGroups.TryAdd(group.Name, group))
                         {
                             ButtonGroups[group.Name] = group;
@@ -86,6 +86,7 @@ public static class ButtonManage
                         {
                             continue;
                         }
+                        layout.Buttons ??= [];
                         if (!ButtonLayouts.TryAdd(layout.Name, layout))
                         {
                             ButtonLayouts[layout.Name] = layout;
@@ -164,7 +165,8 @@ public static class ButtonManage
     {
         var layout = new ButtonLayout()
         { 
-            Name = name
+            Name = name,
+            Buttons = []
         };
 
         if (!ButtonLayouts.TryAdd(name, layout))
@@ -275,6 +277,7 @@ public static class ButtonManage
                     Margin = new(5, 5, 5, 5),
                     Horizontal = HorizontalAlignment.Right,
                     Vertical = VerticalAlignment.Top,
+                    TextSize = 20,
                     Content = "左键",
                     Backgroud = "#343434",
                     Foreground = "#FFFFFF",
@@ -290,7 +293,7 @@ public static class ButtonManage
                     Horizontal = HorizontalAlignment.Right,
                     Vertical = VerticalAlignment.Top,
                     Margin = new(5, 5, 60, 5),
-                    TextSize = 40,
+                    TextSize = 20,
                     Content = "右键",
                     Backgroud = "#343434",
                     Foreground = "#FFFFFF",

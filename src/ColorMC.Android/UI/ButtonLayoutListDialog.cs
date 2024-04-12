@@ -81,7 +81,11 @@ public class ButtonLayoutListDialog : Java.Lang.Object, AdapterView.IOnItemClick
 
     public void OnItemClick(AdapterView? parent, View? view, int position, long id)
     {
-        var result = (view as TextView)?.Text?.ToString();
+        if (position < 0)
+        {
+            return;
+        }
+        var result = adapter.GetItem(position);
         if (string.IsNullOrWhiteSpace(result))
         {
             return;
@@ -93,7 +97,11 @@ public class ButtonLayoutListDialog : Java.Lang.Object, AdapterView.IOnItemClick
 
     public bool OnItemLongClick(AdapterView? parent, View? view, int position, long id)
     {
-        var result = (view as TextView)?.Text?.ToString();
+        if (position < 0)
+        {
+            return true;
+        }
+        var result = adapter.GetItem(position);
         if (string.IsNullOrWhiteSpace(result))
         {
             return true;

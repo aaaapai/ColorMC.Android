@@ -115,7 +115,7 @@ public class MainActivity : AvaloniaMainActivity<App>
     public void GameSetting()
     {
         var intent = new Intent(this, typeof(GameActivity));
-        intent.PutExtra("EDIT", true);
+        intent.PutExtra("EDIT_LAYOUT", true);
         intent.AddFlags(ActivityFlags.SingleTop);
         StartActivity(intent);
     }
