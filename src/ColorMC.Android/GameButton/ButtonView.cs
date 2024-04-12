@@ -2,31 +2,117 @@
 using Android.Graphics;
 using Android.Views;
 using Android.Widget;
+using Avalonia.Layout;
 using System;
 
 namespace ColorMC.Android.GameButton;
 
-public class ButtonView : View
+public class ButtonView : View, View.IOnTouchListener
 {
-    private ButtonData _data;
-    private IButtonFuntion _func;
-    private Paint paint;
-    private Bitmap? bitmap;
-    private Matrix? matrix;
+    private readonly ButtonData _data;
+    private Paint _paint;
+    private Bitmap? _bitmap;
+    private Matrix? _matrix;
 
-    private int RenderWidth, RenderHeight;
+    private readonly int RenderWidth, RenderHeight;
+    private readonly GestureDetector gestureDetector;
+
+    private class GestureListener(ButtonData data, IButtonFuntion func) : GestureDetector.SimpleOnGestureListener
+    {
+        public override bool OnDoubleTap(MotionEvent e)
+        {
+            if (func.IsEdit)
+            {
+                func.GoEdit(data);
+            }
+
+            return base.OnDoubleTap(e);
+        }
+
+        public override bool OnSingleTapConfirmed(MotionEvent e)
+        {
+            if (!func.IsEdit)
+            {
+                switch (data.Type)
+                {
+                    case ButtonData.ButtonType.Setting:
+                        func.ShowSetting();
+                        break;
+                    case ButtonData.ButtonType.LastGroup:
+                        func.LastGroup();
+                        break;
+                    case ButtonData.ButtonType.NextGroup:
+                        func.NextGroup();
+                        break;
+                }
+            }
+
+            return base.OnSingleTapConfirmed(e);
+        }
+    }
 
     public ButtonView(ButtonData data, IButtonFuntion func, Context? context) : base(context)
     {
         _data = data;
-        _func = func;
 
         RenderWidth = DpToPx(_data.Width);
         RenderHeight = DpToPx(_data.Height);
 
-        LoadContent();
+        _paint = new Paint(PaintFlags.AntiAlias)
+        {
+            Color = Color.ParseColor(_data.Foreground ?? "#FFFFFF"),
+            TextSize = DpToPx(_data.TextSize),
+            TextAlign = Paint.Align.Center
+        };
 
-        Click += GameButton_Click;
+        SetBackgroundColor(Color.ParseColor(_data.Backgroud ?? "#000000"));
+
+        if (!string.IsNullOrWhiteSpace(_data.Image))
+        {
+            try
+            {
+                var bytes = Convert.FromBase64String(_data.Image);
+                _bitmap = BitmapFactory.DecodeByteArray(bytes, 0, bytes.Length);
+            }
+            catch
+            {
+
+            }
+        }
+        else if (_data.Type == ButtonData.ButtonType.Setting)
+        {
+            _bitmap = BitmapFactory.DecodeResource(Resources, _Microsoft.Android.Resource.Designer.ResourceConstant.Drawable.icon);
+        }
+
+        if (_bitmap != null)
+        {
+            int down = DpToPx(1);
+            // 计算缩放比例和图片位置
+            int viewWidth = RenderWidth - down * 2; // 减去两侧的间距
+            int viewHeight = RenderHeight - down * 2; // 减去上下的间距
+            _matrix = new();
+            if (viewHeight > 0 && viewHeight > 0)
+            {
+                float scaleWidth = viewWidth / (float)_bitmap.Width;
+                float scaleHeight = viewHeight / (float)_bitmap.Height;
+                float scale = Math.Min(scaleWidth, scaleHeight); // 保持图片比例不变
+
+
+                _matrix.SetScale(scale, scale);
+
+                // 计算图片居中的偏移量
+                float dx = (viewWidth - _bitmap.Width * scale) / 2;
+                float dy = (viewHeight - _bitmap.Height * scale) / 2;
+                _matrix.PostTranslate(dx + down, dy + down); // 添加边框间距
+            }
+            else
+            {
+                _matrix.Reset();
+            }
+        }
+
+        gestureDetector = new GestureDetector(context, new GestureListener(data, func));
+        SetOnTouchListener(this);
     }
 
     protected override void OnAttachedToWindow()
@@ -81,93 +167,24 @@ public class ButtonView : View
         return (int)Math.Round(dp * density);
     }
 
-    private void GameButton_Click(object? sender, EventArgs e)
-    {
-        if (_func.IsEdit)
-        {
-
-            return;
-        }   
-        switch (_data.Type)
-        {
-            case ButtonData.ButtonType.Setting:
-                _func.ShowSetting();
-                break;
-            case ButtonData.ButtonType.LastGroup:
-                _func.LastGroup();
-                break;
-            case ButtonData.ButtonType.NextGroup:
-                _func.NextGroup();
-                break;
-        }
-    }
-
-    private void LoadContent()
-    {
-        paint = new Paint(PaintFlags.AntiAlias)
-        {
-            Color = Color.ParseColor(_data.Foreground ?? "#FFFFFF"),
-            TextSize = DpToPx(_data.TextSize)
-        };
-        paint.TextAlign = Paint.Align.Center;
-
-        SetBackgroundColor(Color.ParseColor(_data.Backgroud ?? "#000000"));
-
-        if (!string.IsNullOrWhiteSpace(_data.Image))
-        {
-            try
-            {
-                var bytes = Convert.FromBase64String(_data.Image);
-                bitmap = BitmapFactory.DecodeByteArray(bytes, 0, bytes.Length);
-            }
-            catch
-            {
-
-            }
-        }
-        else if (_data.Type == ButtonData.ButtonType.Setting)
-        {
-            bitmap = BitmapFactory.DecodeResource(Resources, _Microsoft.Android.Resource.Designer.ResourceConstant.Drawable.icon);
-        }
-
-        if (bitmap != null)
-        {
-            int down = DpToPx(1);
-            // 计算缩放比例和图片位置
-            int viewWidth = RenderWidth - down * 2; // 减去两侧的间距
-            int viewHeight = RenderHeight - down * 2; // 减去上下的间距
-            if (viewHeight < 0 || viewHeight < 0)
-            {
-                return;
-            }
-
-            float scaleWidth = viewWidth / (float)bitmap.Width;
-            float scaleHeight = viewHeight / (float)bitmap.Height;
-            float scale = Math.Min(scaleWidth, scaleHeight); // 保持图片比例不变
-
-            matrix = new();
-            matrix.SetScale(scale, scale);
-
-            // 计算图片居中的偏移量
-            float dx = (viewWidth - bitmap.Width * scale) / 2;
-            float dy = (viewHeight - bitmap.Height * scale) / 2;
-            matrix.PostTranslate(dx + down, dy + down); // 添加边框间距
-        }
-    }
-
     protected override void OnDraw(Canvas canvas)
     {
         base.OnDraw(canvas);
 
-        if (bitmap != null && matrix != null)
+        if (_bitmap != null && _matrix != null)
         {
-            canvas.DrawBitmap(bitmap, matrix, null);
+            canvas.DrawBitmap(_bitmap, _matrix, null);
         }
 
         if (_data.Content != null)
         {
-            float baseLineY = RenderHeight / 2 - (paint.Descent() + paint.Ascent()) / 2;
-            canvas.DrawText(_data.Content, RenderWidth / 2, baseLineY, paint);
+            float baseLineY = RenderHeight / 2 - (_paint.Descent() + _paint.Ascent()) / 2;
+            canvas.DrawText(_data.Content, RenderWidth / 2, baseLineY, _paint);
         }
+    }
+
+    public bool OnTouch(View? v, MotionEvent? e)
+    {
+        return gestureDetector.OnTouchEvent(e!);
     }
 }

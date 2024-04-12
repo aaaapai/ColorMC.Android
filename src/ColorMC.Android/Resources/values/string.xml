@@ -50,5 +50,9 @@
 	<string name="setting_text22">下</string>
 	<string name="setting_text23">右下</string>
 	<string name="setting_text24">设置按钮</string>
+	<string name="setting_text25">按键边距</string>
+	<string name="setting_text26">按键大小</string>
+	<string name="setting_text27">宽</string>
+	<string name="setting_text28">高</string>
 	<string name="setting_info1">布局名字</string>
 </resources>
