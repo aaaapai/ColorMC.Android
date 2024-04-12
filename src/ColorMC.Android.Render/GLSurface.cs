@@ -54,6 +54,11 @@ public class GLSurface : GLSurfaceView, ISurfaceHolderCallback, GLSurfaceView.IR
 
     public void OnDrawFrame(IGL10? gl)
     {
+        if (NowGame == null)
+        {
+            return;
+        }
+
         GLES20.GlViewport(0, 0, Width, Height);
         GLES20.GlClearColor(0, 0, 0, 0);
         GLES20.GlClear(GLES20.GlColorBufferBit);

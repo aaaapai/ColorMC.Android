@@ -14,12 +14,22 @@ public partial class PhoneControl : UserControl
         WrapPanel panel = new();
         Button button = new()
         {
-            Width = 140,
+            Width = 100,
             Height = 25,
-            Content = "打开手机渲染设置",
+            Content = "渲染设置",
             Margin = new(0, 0, 5, 0)
         };
         button.Click += Button_Click;
+        panel.Children.Add(button);
+
+        button = new()
+        {
+            Width = 100,
+            Height = 25,
+            Content = "控制设置",
+            Margin = new(0, 0, 5, 0)
+        };
+        button.Click += Button1_Click;
         panel.Children.Add(button);
 
         ToggleSwitch check = new()
@@ -32,6 +42,11 @@ public partial class PhoneControl : UserControl
         panel.Children.Add(check);
 
         Content = panel;
+    }
+
+    private void Button1_Click(object? sender, RoutedEventArgs e)
+    {
+        _activity.GameSetting();
     }
 
     private void Button_Click(object? sender, RoutedEventArgs e)

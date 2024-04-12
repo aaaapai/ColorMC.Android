@@ -41,6 +41,11 @@
     <None Remove="RemoveNode.xml" />
     <None Remove="Resources\drawable\icon.png" />
     <None Remove="Resources\drawable\radio_button_selector.xml" />
+    <None Remove="Resources\layout\button_edit.xml" />
+    <None Remove="Resources\layout\button_group_edit.xml" />
+    <None Remove="Resources\layout\button_layout_list.xml" />
+    <None Remove="Resources\layout\button_list_item.xml" />
+    <None Remove="Resources\layout\button_tool.xml" />
     <None Remove="Resources\layout\dialog_with_tabs.xml" />
     <None Remove="Resources\layout\fragment_tab1.xml" />
     <None Remove="Resources\layout\fragment_tab2.xml" />
@@ -80,13 +85,14 @@
 
   <ItemGroup>
     <PackageReference Include="Avalonia.Android" Version="11.0.10" />
-    <PackageReference Include="Xamarin.AndroidX.Activity" Version="1.8.1.1" />
-    <PackageReference Include="Xamarin.AndroidX.AppCompat" Version="1.6.1.6" />
-    <PackageReference Include="Xamarin.AndroidX.Core" Version="1.12.0.3" />
-	<PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.5" />
-	<PackageReference Include="Xamarin.AndroidX.Preference" Version="1.2.1.3" />
-	<PackageReference Include="Xamarin.AndroidX.ViewPager2" Version="1.0.0.24" />
-	<PackageReference Include="Xamarin.Google.Android.Material" Version="1.10.0.2" />
+    <PackageReference Include="Xamarin.AndroidX.Activity" Version="1.8.2.1" />
+    <PackageReference Include="Xamarin.AndroidX.AppCompat" Version="1.6.1.7" />
+    <PackageReference Include="Xamarin.AndroidX.Core" Version="1.12.0.4" />
+	<PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.6" />
+	<PackageReference Include="Xamarin.AndroidX.GridLayout" Version="1.0.0.23" />
+	<PackageReference Include="Xamarin.AndroidX.Preference" Version="1.2.1.4" />
+	<PackageReference Include="Xamarin.AndroidX.ViewPager2" Version="1.0.0.25" />
+	<PackageReference Include="Xamarin.Google.Android.Material" Version="1.10.0.3" />
   </ItemGroup>	
 
   <ItemGroup>

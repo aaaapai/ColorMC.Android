@@ -2,7 +2,6 @@
 using Android.Graphics;
 using Android.Views;
 using Android.Widget;
-using Avalonia.Layout;
 using System;
 
 namespace ColorMC.Android.GameButton;
@@ -84,10 +83,21 @@ public class ButtonView : View
 
     private void GameButton_Click(object? sender, EventArgs e)
     {
+        if (_func.IsEdit)
+        {
+
+            return;
+        }   
         switch (_data.Type)
         {
             case ButtonData.ButtonType.Setting:
                 _func.ShowSetting();
+                break;
+            case ButtonData.ButtonType.LastGroup:
+                _func.LastGroup();
+                break;
+            case ButtonData.ButtonType.NextGroup:
+                _func.NextGroup();
                 break;
         }
     }
@@ -101,7 +111,7 @@ public class ButtonView : View
         };
         paint.TextAlign = Paint.Align.Center;
 
-        SetBackgroundColor(Color.ParseColor(_data.BackGroud ?? "#000000"));
+        SetBackgroundColor(Color.ParseColor(_data.Backgroud ?? "#000000"));
 
         if (!string.IsNullOrWhiteSpace(_data.Image))
         {

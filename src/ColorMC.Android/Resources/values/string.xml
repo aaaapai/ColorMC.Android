@@ -25,4 +25,30 @@
 	<string name="game_info1">是否同时关闭游戏</string>
 	<string name="game_info2">关闭游戏</string>
 	<string name="game_info3">保持运行</string>
+
+	<string name="setting_text1">选择一个按钮布局</string>
+	<string name="setting_text2">新建一个按钮布局</string>
+	<string name="setting_text3">修改按钮组</string>
+	<string name="setting_text4">选择一个按钮组</string>
+	<string name="setting_text5">新建一个按钮组</string>
+	<string name="setting_text6">修改按钮布局</string>
+	<string name="setting_text7">按键菜单</string>
+	<string name="setting_text8">添加按钮</string>
+	<string name="setting_text9">删除布局</string>
+	<string name="setting_text10">长按可以删除</string>
+	<string name="setting_text11">主按键布局选择</string>
+	<string name="setting_text12">鼠标布局选择</string>
+	<string name="setting_text13">添加一个子布局</string>
+	<string name="setting_text14">按键对齐方式</string>
+	<string name="setting_text15">左上</string>
+	<string name="setting_text16">上</string>
+	<string name="setting_text17">右上</string>
+	<string name="setting_text18">左</string>
+	<string name="setting_text19">中</string>
+	<string name="setting_text20">右</string>
+	<string name="setting_text21">左下</string>
+	<string name="setting_text22">下</string>
+	<string name="setting_text23">右下</string>
+	<string name="setting_text24">设置按钮</string>
+	<string name="setting_info1">布局名字</string>
 </resources>

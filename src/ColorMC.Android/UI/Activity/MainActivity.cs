@@ -8,6 +8,7 @@ using Android.Util;
 using Avalonia.Android;
 using Avalonia.Controls;
 using Avalonia.Threading;
+using ColorMC.Android.GameButton;
 using ColorMC.Android.GLRender;
 using ColorMC.Core;
 using ColorMC.Core.LaunchPath;
@@ -53,11 +54,12 @@ public class MainActivity : AvaloniaMainActivity<App>
 
         CacheDir = ApplicationContext!.CacheDir!.AbsolutePath!;
         NativeLibDir = ApplicationInfo!.NativeLibraryDir!;
-        ExternalFilesDir = ApplicationContext.GetExternalFilesDir(null)!.AbsolutePath;
+        ExternalFilesDir = GetExternalFilesDir(null)!.AbsolutePath;
 
         ColorMCAndroid.Init();
+        ButtonManage.Load();
 
-        ColorMCGui.StartPhone(GetExternalFilesDir(null)!.AbsolutePath + "/");
+        ColorMCGui.StartPhone(ExternalFilesDir + "/");
         PhoneConfigUtils.Init(ColorMCCore.BaseDir);
 
         base.OnCreate(savedInstanceState);
@@ -108,6 +110,14 @@ public class MainActivity : AvaloniaMainActivity<App>
         //var mainIntent = new Intent();
         //mainIntent.SetAction("ColorMC.Minecraft.Setting");
         //StartActivity(mainIntent);
+    }
+
+    public void GameSetting()
+    {
+        var intent = new Intent(this, typeof(GameActivity));
+        intent.PutExtra("EDIT", true);
+        intent.AddFlags(ActivityFlags.SingleTop);
+        StartActivity(intent);
     }
 
     public Process PhoneGameLaunch(GameSettingObj obj, JavaInfo jvm, List<string> list,
