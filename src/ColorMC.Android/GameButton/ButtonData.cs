@@ -35,27 +35,27 @@ public record ButtonData
         /// <summary>
         /// 打开设置
         /// </summary>
-        Setting, 
+        Setting,
         /// <summary>
-        /// 切换到上一个按钮组
+        /// 切换到上一按键布局
         /// </summary>
         LastGroup,
         /// <summary>
-        /// 切换到下一个按钮组
+        /// 切换到下一按键布局
         /// </summary>
-        NextGroup, 
+        NextGroup,
         /// <summary>
-        /// 循环切换按钮组
+        /// 循环按钮布局
         /// </summary>
-        LoopGroup, 
+        LoopGroup,
         /// <summary>
-        /// 鼠标按钮
+        /// 键盘输入按钮
         /// </summary>
-        Mouse, 
+        InputKey,
         /// <summary>
-        /// 键盘按钮
+        /// 鼠标输入按钮
         /// </summary>
-        Key
+        MouseKey,
     }
 
     /// <summary>

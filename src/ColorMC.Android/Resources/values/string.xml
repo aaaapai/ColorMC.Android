@@ -54,5 +54,9 @@
 	<string name="setting_text26">按键大小</string>
 	<string name="setting_text27">宽</string>
 	<string name="setting_text28">高</string>
+	<string name="setting_text29">按钮类型</string>
+	<string name="setting_text30">按钮码</string>
+	<string name="setting_text31">背景色</string>
+	<string name="setting_text32">前景色</string>
 	<string name="setting_info1">布局名字</string>
 </resources>

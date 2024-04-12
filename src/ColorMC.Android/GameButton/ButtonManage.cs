@@ -192,7 +192,7 @@ public static class ButtonManage
     {
         return new ButtonData()
         {
-            Type = ButtonData.ButtonType.Key,
+            Type = ButtonData.ButtonType.InputKey,
             Width = 50,
             Height = 50,
             Horizontal = HorizontalAlignment.Left,
@@ -268,7 +268,7 @@ public static class ButtonManage
             [
                 new ButtonData()
                 {
-                    Type = ButtonData.ButtonType.Mouse,
+                    Type = ButtonData.ButtonType.MouseKey,
                     Data = LwjglKeycode.GLFW_MOUSE_BUTTON_LEFT,
                     Width = 50,
                     Height = 50,
@@ -284,7 +284,7 @@ public static class ButtonManage
                 },
                 new()
                 {
-                    Type = ButtonData.ButtonType.Mouse,
+                    Type = ButtonData.ButtonType.MouseKey,
                     Width = 50,
                     Height = 50,
                     Horizontal = HorizontalAlignment.Right,
@@ -300,7 +300,7 @@ public static class ButtonManage
                 },
                 new()
                 {
-                    Type = ButtonData.ButtonType.Key,
+                    Type = ButtonData.ButtonType.InputKey,
                     Data = LwjglKeycode.GLFW_KEY_LEFT_ALT,
                     Width = 50,
                     Height = 50,
@@ -317,7 +317,7 @@ public static class ButtonManage
                 },
                 new()
                 {
-                    Type = ButtonData.ButtonType.Key,
+                    Type = ButtonData.ButtonType.InputKey,
                     Data = LwjglKeycode.GLFW_KEY_LEFT_CONTROL,
                     Width = 50,
                     Height = 50,
@@ -334,7 +334,7 @@ public static class ButtonManage
                 },
                 new()
                 {
-                    Type = ButtonData.ButtonType.Key,
+                    Type = ButtonData.ButtonType.InputKey,
                     Data = LwjglKeycode.GLFW_KEY_LEFT_SHIFT,
                     Width = 100,
                     Height = 50,
