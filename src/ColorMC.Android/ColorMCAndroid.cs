@@ -62,8 +62,8 @@ public static class ColorMCAndroid
 
     public static Process PhoneStartJvm(string file)
     {
-        //var info = new ProcessStartInfo(MainActivity.NativeLibDir + "/libcolormcnative.so");
-        var info = new ProcessStartInfo(file);
+        var info = new ProcessStartInfo(MainActivity.NativeLibDir + "/libcolormcnative.so");
+        //var info = new ProcessStartInfo(file);
         var path = Path.GetFullPath(new FileInfo(file).Directory.Parent.FullName);
 
         var path1 = JavaUnpack.GetLibPath(path);

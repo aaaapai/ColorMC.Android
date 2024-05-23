@@ -10,7 +10,7 @@
     <AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
     <SupportedOSPlatformVersion>28.0</SupportedOSPlatformVersion>
     <IsPublishable>True</IsPublishable>
-	<RuntimeIdentifiers>android-x64</RuntimeIdentifiers>
+	<RuntimeIdentifiers>android-arm64</RuntimeIdentifiers>
 	<!--<RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>-->
 	<AndroidManifestMerger>manifestmerger.jar</AndroidManifestMerger>
   </PropertyGroup>
