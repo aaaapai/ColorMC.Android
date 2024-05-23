@@ -14,7 +14,7 @@ using AlertDialog = AndroidX.AppCompat.App.AlertDialog;
 namespace ColorMC.Android.UI.Activity;
 
 [Activity(Label = "GameActivity",
-    Theme = "@style/Theme.AppCompat.DayNight.NoActionBar",
+    Theme = "@style/Theme.AppCompat.NoActionBar.FullScreen",
     TaskAffinity = "colormc.android.game.render",
     ScreenOrientation = ScreenOrientation.SensorLandscape,
     Icon = "@drawable/icon")]

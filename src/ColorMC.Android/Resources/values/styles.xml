@@ -17,4 +17,8 @@
 		<item name="android:textColor">#FFFFFF</item>
 		<!-- 文本颜色selector -->
 	</style>
+
+	<style name="Theme.AppCompat.NoActionBar.FullScreen" parent="Theme.AppCompat.DayNight.NoActionBar">
+		<item name="android:windowFullscreen">true</item>
+	</style>
 </resources>
