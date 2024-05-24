@@ -12,7 +12,7 @@
 #include <string.h>
 
 #include "game_sock.h"
-#include "events.h"
+#include "lwjgl_bridges/events.h"
 
 extern bool can_run;
 extern int width;

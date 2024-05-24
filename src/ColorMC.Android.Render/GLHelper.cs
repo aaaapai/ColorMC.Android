@@ -26,6 +26,7 @@ public static class GLHelper
     {
         return type switch
         {
+            GameRender.RenderType.zink => "libOSMesa_8.so",
             _ => "libgl4es_114.so"
         };
     }
@@ -34,7 +35,6 @@ public static class GLHelper
     {
         return type switch
         {
-            GameRender.RenderType.angle => "angle",
             GameRender.RenderType.zink => "zink",
             _ => "gl4es"
         };

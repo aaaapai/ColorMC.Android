@@ -167,8 +167,7 @@ public class GameRender
     public enum RenderType
     {
         gl4es = 0,
-        angle = 1,
-        zink = 2
+        zink = 1
     }
 
     public enum DisplayType
@@ -246,8 +245,14 @@ public class GameRender
         };
         process.StartInfo.Environment.Add("GAME_SOCK", _game);
         process.StartInfo.Environment.Add("RENDER_SOCK", _render);
-        process.StartInfo.Environment.Add("GL_SO", gameRender.GetFileName());
-        process.StartInfo.Environment.Add("EGL_SO", "libEGL.so");
+        if (gameRender == RenderType.gl4es)
+        {
+            process.StartInfo.Environment.Add("GL_SO", gameRender.GetFileName());
+        }
+        else if (gameRender == RenderType.zink)
+        {
+            process.StartInfo.Environment.Add("MESA_SO", gameRender.GetFileName());
+        }
         process.StartInfo.Environment.Add("LIBGL_MIPMAP", "3");
         process.StartInfo.Environment.Add("LIBGL_NOERROR", "1");
         process.StartInfo.Environment.Add("LIBGL_NOINTOVLHACK", "1");

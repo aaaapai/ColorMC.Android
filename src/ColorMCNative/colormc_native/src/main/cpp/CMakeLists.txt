@@ -6,8 +6,7 @@ set(ANDROID_PLATFORM android-26)
 
 add_executable(${CMAKE_PROJECT_NAME} "test.c")
 
-find_library(android-lib
-        egl)
+find_library(android-lib egl)
 
 add_library("colormcnative_display" SHARED
         display/display.c
@@ -22,14 +21,16 @@ target_link_libraries("colormcnative_display"
 
 add_library("colormcnative_run" SHARED
         run/run.c
-        run/bmp.c
-        run/events.c
-        run/lwjgl_use.c
+        run/lwjgl_bridges/events.c
+        run/lwjgl_bridges/lwjgl_use.c
         run/game_sock.c
         run/render_sock.c
-        run/render_test.c
         run/context_list.c
-        run/dl_loader/egl_loader.c
+        run/render/render_gl4es.c
+        run/render/render_zink.c
         run/dl_loader/gl_loader.c
+        run/dl_loader/egl_loader.c
+        run/dl_loader/gles_loader.c
+        run/dl_loader/mesa_loader.c
         run/dl_loader/ah_loader.c
-        run/run_shared_texture.c)
+        run/test/run_shared_texture.c)

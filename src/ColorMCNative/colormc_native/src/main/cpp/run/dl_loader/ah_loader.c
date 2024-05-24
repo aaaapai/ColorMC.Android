@@ -20,7 +20,7 @@ void (*AHardwareBuffer_describe_p)(const AHardwareBuffer *buffer,
 void (*AHardwareBuffer_acquire_p)(AHardwareBuffer *buffer);
 int(*AHardwareBuffer_sendHandleToUnixSocket_p)(const AHardwareBuffer* _Nonnull buffer, int socketFd);
 
-bool ah_load() {
+bool ah_dlopen() {
     void *al_dl_handel = dlopen("libandroid.so", RTLD_LAZY);
     if (al_dl_handel == NULL) {
         printf("[ColorMC Error] dlopen fail %s\n", dlerror());

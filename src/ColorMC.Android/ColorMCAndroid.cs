@@ -1,4 +1,6 @@
-﻿using Android.OS;
+﻿using Android.Content;
+using Android.Graphics;
+using Android.OS;
 using Android.Systems;
 using Android.Util;
 using ColorMC.Android.components;
@@ -15,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using Path = System.IO.Path;
 using Process = System.Diagnostics.Process;
 
@@ -22,12 +25,22 @@ namespace ColorMC.Android;
 
 public static class ColorMCAndroid
 {
+    public static MainActivity Activity { get; set; }
+    public static GameActivity Game { get; set; }
+
+    public static readonly Dictionary<string, GameRender> Games = [];
+    public static string NativeLibDir;
+    public static string CacheDir;
+    public static string ExternalFilesDir;
+    public static string FilesDir;
+
     public static void Init()
     {
         ColorMCCore.PhoneJvmInstall = PhoneJvmInstall;
         ColorMCCore.PhoneStartJvm = PhoneStartJvm;
         ColorMCCore.PhoneGetDataDir = PhoneGetDataDir;
         ColorMCCore.PhoneJvmRun = PhoneJvmRun;
+        ColorMCCore.PhoneGameLaunch = PhoneGameLaunch;
         ColorMCCore.GetFreePort = GetFreePort;
 
         ColorMCGui.PhoneGetFrp = PhoneGetFrp;
@@ -45,9 +58,9 @@ public static class ColorMCAndroid
     {
         if (type == FrpType.OpenFrp)
         {
-            return MainActivity.NativeLibDir + "/libfrpc_openfrp.so";
+            return NativeLibDir + "/libfrpc_openfrp.so";
         }
-        return MainActivity.NativeLibDir + "/libfrpc.so";
+        return NativeLibDir + "/libfrpc.so";
     }
 
     public static void PhoneJvmInstall(Stream stream, string file, ColorMCCore.ZipUpdate? zip)
@@ -62,7 +75,7 @@ public static class ColorMCAndroid
 
     public static Process PhoneStartJvm(string file)
     {
-        var info = new ProcessStartInfo(MainActivity.NativeLibDir + "/libcolormcnative.so");
+        var info = new ProcessStartInfo(NativeLibDir + "/libcolormcnative.so");
         //var info = new ProcessStartInfo(file);
         var path = Path.GetFullPath(new FileInfo(file).Directory.Parent.FullName);
 
@@ -73,14 +86,14 @@ public static class ColorMCAndroid
         var LD_LIBRARY_PATH = $"{path1}/{(File.Exists($"{path1}/server/libjvm.so") ? "server" : "client")}"
             + $":{path}:{path1}/jli:{path1}:"
             + "/system/lib64:/vendor/lib64:/vendor/lib64/hw:"
-            + MainActivity.NativeLibDir;
+            + NativeLibDir;
 
         info.Environment.Add("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
         info.Environment.Add("PATH", path1 + "/bin:" + temp1);
         info.Environment.Add("JAVA_HOME", path);
-        info.Environment.Add("NATIVE_DIR", MainActivity.NativeLibDir);
+        info.Environment.Add("NATIVE_DIR", NativeLibDir);
         info.Environment.Add("HOME", ColorMCCore.BaseDir);
-        info.Environment.Add("TMPDIR", MainActivity.CacheDir);
+        info.Environment.Add("TMPDIR", CacheDir);
         info.ArgumentList.Add("-Djava.home=" + path);
 
         var p = new Process
@@ -101,9 +114,9 @@ public static class ColorMCAndroid
         }
 
         p.StartInfo.WorkingDirectory = dir;
-        p.StartInfo.ArgumentList.Add("-Djava.io.tmpdir=" + MainActivity.CacheDir);
-        p.StartInfo.ArgumentList.Add("-Djna.boot.library.path=" + MainActivity.NativeLibDir);
-        p.StartInfo.ArgumentList.Add("-Duser.home=" + MainActivity.ExternalFilesDir);
+        p.StartInfo.ArgumentList.Add("-Djava.io.tmpdir=" + CacheDir);
+        p.StartInfo.ArgumentList.Add("-Djna.boot.library.path=" + NativeLibDir);
+        p.StartInfo.ArgumentList.Add("-Duser.home=" + ExternalFilesDir);
         p.StartInfo.ArgumentList.Add("-Duser.language=" + Java.Lang.JavaSystem.GetProperty("user.language"));
         p.StartInfo.ArgumentList.Add("-Dos.name=Linux");
         p.StartInfo.ArgumentList.Add("-Dos.version=Android-" + ColorMCCore.Version);
@@ -144,11 +157,10 @@ public static class ColorMCAndroid
             File.WriteAllBytes(file, Resource1.options);
         }
 
-        var native = MainActivity.NativeLibDir;
         var classpath = false;
         for (int a = 0; a < list.Count; a++)
         {
-            list[a] = list[a].Replace("%natives_directory%", native);
+            list[a] = list[a].Replace("%natives_directory%", NativeLibDir);
             if (list[a].StartsWith("-cp"))
             {
                 classpath = true;
@@ -204,5 +216,81 @@ public static class ColorMCAndroid
         }
 
         return p;
+    }
+
+    private static void P_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+    {
+        Log.Error("Game Pipe", e.Data ?? "null");
+    }
+
+    private static void P_OutputDataReceived(object sender, DataReceivedEventArgs e)
+    {
+        Log.Info("Game Pipe", e.Data ?? "null");
+    }
+
+    public static Process PhoneGameLaunch(GameSettingObj obj, JavaInfo jvm, List<string> list,
+   Dictionary<string, string> env)
+    {
+        AndroidHelper.Main.Post(() =>
+        {
+            var intent = new Intent(Activity, typeof(GameActivity));
+            intent.AddFlags(ActivityFlags.SingleTop);
+            Activity.StartActivity(intent);
+        });
+
+        var render = GameRender.RenderType.gl4es;
+        ConfigSet(obj);
+        ReplaceClassPath(obj, list);
+
+        while (Game == null)
+        {
+            Thread.Sleep(100);
+        }
+
+        var display = AndroidHelper.GetDisplayMetrics(Game);
+        Bitmap bitmap;
+        var image = obj.GetIconFile();
+        if (File.Exists(image))
+        {
+            bitmap = BitmapFactory.DecodeFile(image);
+        }
+        else
+        {
+            bitmap = BitmapFactory.DecodeResource(Activity.Resources, Resource.Drawable.icon);
+        }
+
+        var p = BuildRunProcess(render, display, list, obj, jvm, env, false);
+        var game = new GameRender(FilesDir, obj.UUID, obj.Name,
+           bitmap, p, render);
+        game.GameReady += Game_GameReady;
+
+        Games.Remove(obj.UUID);
+        Games.Add(obj.UUID, game);
+
+        game.Start();
+
+        p.OutputDataReceived += P_OutputDataReceived;
+        p.ErrorDataReceived += P_ErrorDataReceived;
+
+        p.Exited += (a, b) =>
+        {
+            if (Games.Remove(obj.UUID, out var game))
+            {
+                game.Close();
+            }
+            Activity.Update();
+        };
+
+        Activity.Update();
+
+        return p;
+    }
+
+    private static void Game_GameReady(string uuid)
+    {
+        AndroidHelper.Main.Post(() =>
+        {
+            Game.StartDisplay(uuid);
+        });
     }
 }

@@ -89,7 +89,7 @@ public class JavaUnpack
         Unpack(path + "/");
         Rename(path);
 
-        File.Copy(MainActivity.NativeLibDir + "/libawt_xawt.so", path + "/lib/libawt_xawt.so");
+        File.Copy(ColorMCAndroid.NativeLibDir + "/libawt_xawt.so", path + "/lib/libawt_xawt.so");
     }
 
     public static string GetLibPath(string path)
@@ -209,7 +209,7 @@ public class JavaUnpack
             {
                 ProcessStartInfo info = new("libunpack200.so")
                 {
-                    WorkingDirectory = MainActivity.NativeLibDir
+                    WorkingDirectory = ColorMCAndroid.NativeLibDir
                 };
                 info.ArgumentList.Add("-r");
                 info.ArgumentList.Add(item.FullName);

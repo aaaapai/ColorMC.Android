@@ -30,4 +30,18 @@
             android:layout_centerHorizontal="true"
             android:text="@string/setting_text7"/>
         </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/view_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:layout_centerInParent="true"
+            style="@android:style/Widget.ProgressBar.Large" />
+    </LinearLayout>
 </RelativeLayout>

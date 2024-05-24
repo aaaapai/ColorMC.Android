@@ -22,7 +22,7 @@ public class Tab4Fragment : Fragment
         var view = inflater!.Inflate(Resource.Layout.fragment_tab4, container, false)!;
         linearLayout = view.FindViewById<LinearLayout>(Resource.Id.tab4_list)!;
 
-        foreach (var item in MainActivity.Games.Values)
+        foreach (var item in ColorMCAndroid.Games.Values)
         {
             var item1 = inflater!.Inflate(Resource.Layout.game_item, linearLayout, false)!;
             var name = item1.FindViewById<TextView>(Resource.Id.game_item_name)!;

@@ -10,13 +10,13 @@ public class GLSurface : GLSurfaceView, ISurfaceHolderCallback, GLSurfaceView.IR
 {
     private readonly List<GameRender> displayList = [];
 
-    private QuadRenderer qrender;
+    private ImageRenderer qrender;
     private int renderWidth, renderHeight;
     private float XRenderRatio, YRenderRatio;
 
     public GameRender NowGame;
 
-    public GLSurface(Context? context, DisplayMetrics display) : base(context)
+    public GLSurface(Context? context) : base(context)
     {
         SetEGLContextClientVersion(3);
         SetRenderer(this);
@@ -144,6 +144,10 @@ public class GLSurface : GLSurfaceView, ISurfaceHolderCallback, GLSurfaceView.IR
 
     public bool OnTouch(View? v, MotionEvent? e)
     {
+        if (NowGame == null)
+        {
+            return false;
+        }
         // Looking for a mouse to handle, won't have an effect if no mouse exists.
         for (int i = 0; i < e.PointerCount; i++)
         {
@@ -184,6 +188,11 @@ public class GLSurface : GLSurfaceView, ISurfaceHolderCallback, GLSurfaceView.IR
 
     public override bool DispatchCapturedPointerEvent(MotionEvent? e)
     {
+        if (NowGame == null)
+        {
+            return false;
+        }
+
         NowGame.MouseX += e.GetX() * XRenderRatio;
         NowGame.MouseY += e.GetX() * YRenderRatio;
 

@@ -18,6 +18,6 @@ extern void (*AHardwareBuffer_describe_p)(const AHardwareBuffer *buffer,
 extern void (*AHardwareBuffer_acquire_p)(AHardwareBuffer *buffer);
 extern int(*AHardwareBuffer_sendHandleToUnixSocket_p)(const AHardwareBuffer* buffer, int socketFd);
 
-bool ah_load();
+bool ah_dlopen();
 
 #endif //COLORMCNATIVE_AH_LOADER_H

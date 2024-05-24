@@ -23,6 +23,7 @@ public class GameActivity : AppCompatActivity, IButtonFuntion
     private RelativeLayout _buttonList;
     private GLSurface view;
     private RelativeLayout buttonTool;
+    private LinearLayout viewLoading;
     private Button button1;
     private bool isEdit;
     private bool isMouse;
@@ -36,13 +37,13 @@ public class GameActivity : AppCompatActivity, IButtonFuntion
     {
         base.OnCreate(savedInstanceState);
 
+        ColorMCAndroid.Game = this;
+
         SetContentView(Resource.Layout.activity_main);
 
         _buttonList = FindViewById<RelativeLayout>(Resource.Id.button_view)!;
-
-        var display = AndroidHelper.GetDisplayMetrics(this);
-
         buttonTool = FindViewById<RelativeLayout>(Resource.Id.button_tool)!;
+        viewLoading = FindViewById<LinearLayout>(Resource.Id.view_loading)!;
         button1 = FindViewById<Button>(Resource.Id.button1)!;
         button1.Click += Button1_Click;
 
@@ -61,14 +62,16 @@ public class GameActivity : AppCompatActivity, IButtonFuntion
             return;
         }
 
-        var uuid = Intent?.GetStringExtra("GAME_UUID");
-        if (uuid != null
-            && MainActivity.Games.TryGetValue(uuid, out var game))
-        {
-            view = new GLSurface(ApplicationContext, display);
-            FindViewById<RelativeLayout>(Resource.Id.surface_view)!
-                .AddView(view);
+        view = new GLSurface(ApplicationContext);
+        FindViewById<RelativeLayout>(Resource.Id.surface_view)!
+            .AddView(view);
+    }
 
+    public void StartDisplay(string uuid)
+    {
+        viewLoading.Visibility = ViewStates.Gone;
+        if (ColorMCAndroid.Games.TryGetValue(uuid, out var game))
+        {
             game.GameClose = GameClose;
             view.SetGame(game);
         }
@@ -105,13 +108,13 @@ public class GameActivity : AppCompatActivity, IButtonFuntion
     {
         AndroidHelper.Main.Post(() =>
         {
-            if (MainActivity.Games.Count == 0)
+            if (ColorMCAndroid.Games.Count == 0)
             {
                 Finish();
             }
             else
             {
-                view.SetGame(MainActivity.Games.Values.ToArray()[0]);
+                view.SetGame(ColorMCAndroid.Games.Values.ToArray()[0]);
             }
         });
     }
@@ -173,7 +176,7 @@ public class GameActivity : AppCompatActivity, IButtonFuntion
         base.OnNewIntent(intent);
         var uuid = intent?.GetStringExtra("GAME_UUID");
         if (uuid != null &&
-            MainActivity.Games.TryGetValue(uuid, out var game))
+            ColorMCAndroid.Games.TryGetValue(uuid, out var game))
         {
             game.GameClose = GameClose;
             view.SetGame(game);

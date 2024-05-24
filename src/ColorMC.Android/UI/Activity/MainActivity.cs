@@ -1,30 +1,22 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Content.PM;
-using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
-using Android.Util;
 using Avalonia.Android;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using ColorMC.Android.GameButton;
 using ColorMC.Android.GLRender;
 using ColorMC.Core;
-using ColorMC.Core.LaunchPath;
-using ColorMC.Core.Objs;
 using ColorMC.Gui;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Process = System.Diagnostics.Process;
 using Uri = Android.Net.Uri;
 
 namespace ColorMC.Android.UI.Activity;
 
 [Activity(Label = "ColorMC",
-    Theme = "@style/MyTheme.NoActionBar",
     Icon = "@drawable/icon",
     MainLauncher = true,
     TaskAffinity = "colormc.android.game.main",
@@ -32,11 +24,6 @@ namespace ColorMC.Android.UI.Activity;
     ScreenOrientation = ScreenOrientation.FullUser)]
 public class MainActivity : AvaloniaMainActivity<App>
 {
-    public static readonly Dictionary<string, GameRender> Games = [];
-    public static string NativeLibDir;
-    public static string CacheDir;
-    public static string ExternalFilesDir;
-
     protected override void OnDestroy()
     {
         base.OnDestroy();
@@ -48,18 +35,20 @@ public class MainActivity : AvaloniaMainActivity<App>
     {
         ColorMCCore.PhoneReadFile = PhoneReadFile;
         ColorMCCore.PhoneOpenUrl = PhoneOpenUrl;
-        ColorMCCore.PhoneGameLaunch = PhoneGameLaunch;
 
         ColorMCGui.PhoneGetSetting = PhoneGetSetting;
 
-        CacheDir = ApplicationContext!.CacheDir!.AbsolutePath!;
-        NativeLibDir = ApplicationInfo!.NativeLibraryDir!;
-        ExternalFilesDir = GetExternalFilesDir(null)!.AbsolutePath;
+        ColorMCAndroid.Activity = this;
+
+        ColorMCAndroid.CacheDir = ApplicationContext!.CacheDir!.AbsolutePath!;
+        ColorMCAndroid.NativeLibDir = ApplicationInfo!.NativeLibraryDir!;
+        ColorMCAndroid.ExternalFilesDir = GetExternalFilesDir(null)!.AbsolutePath;
+        ColorMCAndroid.FilesDir = ApplicationContext.FilesDir!.AbsolutePath!;
 
         ColorMCAndroid.Init();
         ButtonManage.Load();
 
-        ColorMCGui.StartPhone(ExternalFilesDir + "/");
+        ColorMCGui.StartPhone(ColorMCAndroid.ExternalFilesDir + "/");
         PhoneConfigUtils.Init(ColorMCCore.BaseDir);
 
         base.OnCreate(savedInstanceState);
@@ -120,58 +109,13 @@ public class MainActivity : AvaloniaMainActivity<App>
         StartActivity(intent);
     }
 
-    public Process PhoneGameLaunch(GameSettingObj obj, JavaInfo jvm, List<string> list,
-       Dictionary<string, string> env)
-    {
-        var render = GameRender.RenderType.gl4es;
-        ColorMCAndroid.ConfigSet(obj);
-        ColorMCAndroid.ReplaceClassPath(obj, list);
-        var display = AndroidHelper.GetDisplayMetrics(this);
-        Bitmap bitmap;
-        var image = obj.GetIconFile();
-        if (File.Exists(image))
-        {
-            bitmap = BitmapFactory.DecodeFile(image);
-        }
-        else
-        {
-            bitmap = BitmapFactory.DecodeResource(Resources, Resource.Drawable.icon);
-        }
-
-        var p = ColorMCAndroid.BuildRunProcess(render, display, list, obj, jvm, env, false);
-        var game = new GameRender(ApplicationContext.FilesDir.AbsolutePath, obj.UUID, obj.Name,
-           bitmap, p, render);
-        game.GameReady += Game_GameReady;
-
-        Games.Remove(obj.UUID);
-        Games.Add(obj.UUID, game);
-
-        game.Start();
-
-        p.OutputDataReceived += P_OutputDataReceived;
-        p.ErrorDataReceived += P_ErrorDataReceived;
-
-        p.Exited += (a, b) =>
-        {
-            if (Games.Remove(obj.UUID, out var game))
-            {
-                game.Close();
-            }
-            Update();
-        };
-
-        Update();
-
-        return p;
-    }
-
-    private void Update()
+    public void Update()
     {
         Dispatcher.UIThread.Post(() =>
         {
             if (App.AllWindow is { } win)
             {
-                if (Games.Count > 0)
+                if (ColorMCAndroid.Games.Count > 0)
                 {
                     win.Model.SetChoiseContent("ColorMC", "回到游戏");
                     win.Model.SetChoiseCall("ColorMC", () =>
@@ -179,7 +123,7 @@ public class MainActivity : AvaloniaMainActivity<App>
                         AndroidHelper.Main.Post(() =>
                         {
                             var intent = new Intent(this, typeof(GameActivity));
-                            intent.PutExtra("GAME_UUID", Games.Keys.ToArray()[0]);
+                            intent.PutExtra("GAME_UUID", ColorMCAndroid.Games.Keys.ToArray()[0]);
                             intent.AddFlags(ActivityFlags.SingleTop);
                             StartActivity(intent);
                         });
@@ -190,27 +134,6 @@ public class MainActivity : AvaloniaMainActivity<App>
                     win.Model.RemoveChoiseData("ColorMC");
                 }
             }
-        });
-    }
-
-    private void P_ErrorDataReceived(object sender, DataReceivedEventArgs e)
-    {
-        Log.Error("Game Pipe", e.Data ?? "null");
-    }
-
-    private void P_OutputDataReceived(object sender, DataReceivedEventArgs e)
-    {
-        Log.Info("Game Pipe", e.Data ?? "null");
-    }
-
-    private void Game_GameReady(string uuid)
-    {
-        AndroidHelper.Main.Post(() =>
-        {
-            var intent = new Intent(this, typeof(GameActivity));
-            intent.PutExtra("GAME_UUID", uuid);
-            intent.AddFlags(ActivityFlags.SingleTop);
-            StartActivity(intent);
         });
     }
 }

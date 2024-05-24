@@ -21,8 +21,8 @@ public static class ButtonManage
 
     public static void Load()
     {
-        GroupPath = MainActivity.ExternalFilesDir + "/buttons/groups";
-        LayoutPath = MainActivity.ExternalFilesDir + "/buttons/layouts";
+        GroupPath = ColorMCAndroid.ExternalFilesDir + "/buttons/groups";
+        LayoutPath = ColorMCAndroid.ExternalFilesDir + "/buttons/layouts";
 
         Directory.CreateDirectory(GroupPath);
         Directory.CreateDirectory(LayoutPath);

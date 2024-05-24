@@ -34,7 +34,7 @@
  * These are the API functions:
  *   OSMesaCreateContext - create a new Off-Screen Mesa rendering context
  *   OSMesaMakeCurrent - bind an OSMesaContext to a client's image buffer
- *                       and ah_create_buffer the specified context the current one.
+ *                       and make the specified context the current one.
  *   OSMesaDestroyContext - destroy an OSMesaContext
  *   OSMesaGetCurrentContext - return thread's current context ID
  *   OSMesaPixelStore - controls how pixels are stored in image buffer
@@ -55,7 +55,7 @@ extern "C" {
 #endif
 
 
-#include <GL/gl.h>
+#include "gl.h"
 
 
 #define OSMESA_MAJOR_VERSION 11
@@ -321,7 +321,7 @@ OSMesaColorClamp(GLboolean enable);
  */
 GLAPI void GLAPIENTRY
 OSMesaPostprocess(OSMesaContext osmesa, const char *filter,
-                  unsigned enable_value);
+unsigned enable_value);
 
 
 #ifdef __cplusplus
