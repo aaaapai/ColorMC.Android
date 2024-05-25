@@ -108,11 +108,12 @@ bool sendTexture(int sock) {
  * 获取正在使用的context
  */
 void* game_get_context() {
+    printf("[ColorMC Info] game_get_context\n");
     if (now_env == NULL) {
-        printf("[ColorMC Info] egl_get_context no now env\n");
+        printf("[ColorMC Info] game_get_context no now env\n");
         return NULL;
     }
-    printf("[ColorMC Info] egl_get_context output: %p\n", now_env->context);
+    printf("[ColorMC Info] game_get_context output: %p\n", now_env->context);
     fflush(stdout);
     return now_env->context;
 }
@@ -198,8 +199,6 @@ void game_destroy_context(void* window) {
 }
 
 void game_swap_buffers() {
-    printf("[ColorMC Info] game_swap_buffers\n");
-
     if (now_env == NULL) {
         return;
     }
@@ -336,6 +335,11 @@ bool game_init() {
             fflush(stdout);
             return false;
         }
+        if (gles_dlopen() == false) {
+            printf("[ColorMC Error] gl load fail\n");
+            fflush(stdout);
+            return false;
+        }
 
         //创建egl环境
         if (!egl_create()) {
@@ -343,6 +347,7 @@ bool game_init() {
             fflush(stdout);
             return false;
         }
+        printf("[ColorMC Info] gl4es load done\n");
     } else if(render_type == ZINK) {
         setenv("GALLIUM_DRIVER","zink",1);
         if (!mesa_dlopen()) {
@@ -356,6 +361,7 @@ bool game_init() {
             fflush(stdout);
             return false;
         }
+        printf("[ColorMC Info] zink load done\n");
     }
 
     fflush(stdout);

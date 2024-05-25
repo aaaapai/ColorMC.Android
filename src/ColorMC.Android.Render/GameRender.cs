@@ -252,6 +252,8 @@ public class GameRender
         else if (gameRender == RenderType.zink)
         {
             process.StartInfo.Environment.Add("MESA_SO", gameRender.GetFileName());
+            process.StartInfo.Environment.Add("MESA_GL_VERSION_OVERRIDE", "4.6");
+            process.StartInfo.Environment.Add("MESA_GLSL_VERSION_OVERRIDE", "460");
         }
         process.StartInfo.Environment.Add("LIBGL_MIPMAP", "3");
         process.StartInfo.Environment.Add("LIBGL_NOERROR", "1");

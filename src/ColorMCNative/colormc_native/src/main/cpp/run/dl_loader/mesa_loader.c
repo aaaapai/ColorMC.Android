@@ -23,7 +23,18 @@ bool mesa_dlopen() {
         printf("[ColorMC Error] no MESA_SO\n");
         return false;
     }
-    void *dl_handle = dlopen(mesa_library, RTLD_GLOBAL);
+    char *native = getenv("NATIVE_DIR");
+    if (native == NULL) {
+        printf("[ColorMC Error] no NATIVE_DIR\n");
+        return false;
+    }
+    char *main_path = NULL;
+    if (asprintf(&main_path, "%s/%s", native, mesa_library) == -1) {
+        abort();
+    }
+    printf("[ColorMC Info] load MESA_SO %s\n", main_path);
+    void *dl_handle = dlopen(main_path, RTLD_GLOBAL);
+    free(main_path);
     if (!dl_handle) {
         printf("[ColorMC Error] Failed to load MESA_SO\n");
         return false;

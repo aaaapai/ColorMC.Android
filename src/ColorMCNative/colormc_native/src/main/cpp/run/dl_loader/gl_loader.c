@@ -14,6 +14,7 @@ bool gl_dlopen() {
         printf("[ColorMC Error] no GL_SO\n");
         return false;
     }
+    printf("[ColorMC Info] load GL_SO %s\n", gl);
     void *libgl = dlopen(gl, RTLD_LAZY);
     if (!libgl) {
         printf("[ColorMC Error] Failed to load GL_SO\n");

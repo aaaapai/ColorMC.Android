@@ -6,6 +6,8 @@ set(ANDROID_PLATFORM android-26)
 
 add_executable(${CMAKE_PROJECT_NAME} "test.c")
 
+add_library("colormcnative_launch" SHARED test.c)
+
 find_library(android-lib egl)
 
 add_library("colormcnative_display" SHARED
@@ -32,5 +34,4 @@ add_library("colormcnative_run" SHARED
         run/dl_loader/egl_loader.c
         run/dl_loader/gles_loader.c
         run/dl_loader/mesa_loader.c
-        run/dl_loader/ah_loader.c
-        run/test/run_shared_texture.c)
+        run/dl_loader/ah_loader.c)

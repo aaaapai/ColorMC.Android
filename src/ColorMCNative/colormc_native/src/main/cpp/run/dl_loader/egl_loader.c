@@ -46,6 +46,7 @@ EGLBoolean (*eglDestroyImageKHR_p)(EGLDisplay dpy, EGLImageKHR image);
 bool egl_dlopen() {
     char *name = getenv("EGL_SO");
     if (name != NULL) {
+        printf("[ColorMC Info] load EGL_SO %s\n", name);
         void *handel = dlopen(name, RTLD_LAZY);
         if (handel == NULL) {
             printf("[ColorMC Error] Failed to load EGL_SO\n");

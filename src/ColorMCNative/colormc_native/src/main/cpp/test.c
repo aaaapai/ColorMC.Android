@@ -12,6 +12,8 @@
 #define FULL_VERSION "1.8.0-internal"
 #define DOT_VERSION "1.8"
 
+#define EXTERNAL_API __attribute__((used))
+
 static const char* const_progname = "java";
 static const char* const_launcher = "openjdk";
 static const char** const_jargs = NULL;
@@ -145,7 +147,7 @@ void load_dl() {
     android_update_LD_LIBRARY_PATH(env);
 }
 
-int main(int argc, char** args) {
+EXTERNAL_API int start(int argc, char** args) {
     char *dir = getenv("JAVA_HOME");
     if (dir == NULL) {
         printf("[ColorMC Error] no JAVA_HOME\n");
@@ -206,4 +208,8 @@ int main(int argc, char** args) {
                        *args, // (const_launcher != NULL) ? const_launcher : *margv,
                        (const_jargs != NULL) ? JNI_TRUE : JNI_FALSE,
                        const_cpwildcard, const_javaw, const_ergo_class);
+}
+
+int main(int argc, char** args) {
+    return start(argc, args);
 }

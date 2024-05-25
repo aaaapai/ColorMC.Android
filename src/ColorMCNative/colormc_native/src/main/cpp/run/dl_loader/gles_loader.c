@@ -54,6 +54,7 @@ void (*glBlitFramebuffer_p)(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, 
 //        GLsizei width, GLsizei height,GLint border );
 
 bool gles_dlopen() {
+    printf("[ColorMC Info] load GLES %s\n", "libGLESv2.so");
     void *libGLESv2 = dlopen("libGLESv2.so", RTLD_LAZY);
     if (!libGLESv2) {
         printf("[ColorMC Error] Failed to load libGLESv2.so\n");

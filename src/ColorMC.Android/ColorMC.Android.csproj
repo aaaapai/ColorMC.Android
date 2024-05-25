@@ -3,7 +3,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0-android</TargetFramework>
     <Nullable>enable</Nullable>
-    <ApplicationId>coloryr.colormc2.android</ApplicationId>
+    <ApplicationId>com.coloryr.colormc.android</ApplicationId>
     <ApplicationVersion>35</ApplicationVersion>
     <ApplicationDisplayVersion>24.4.7</ApplicationDisplayVersion>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
@@ -16,7 +16,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<AndroidManifestOverlay Include="RemoveNode.xml" />
+		<!--<AndroidManifestOverlay Include="RemoveNode.xml" />-->
 	</ItemGroup>
 
 	<PropertyGroup Condition="'$(RunAOTCompilation)'=='' and '$(Configuration)'=='Release' and '$(TF_BUILD)'==''">

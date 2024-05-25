@@ -7,9 +7,11 @@ using ColorMC.Android.components;
 using ColorMC.Android.GLRender;
 using ColorMC.Android.UI.Activity;
 using ColorMC.Core;
+using ColorMC.Core.Game;
 using ColorMC.Core.Helpers;
 using ColorMC.Core.LaunchPath;
 using ColorMC.Core.Objs;
+using ColorMC.Core.Objs.Login;
 using ColorMC.Gui;
 using ColorMC.Gui.Objs;
 using Java.Net;
@@ -17,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using Path = System.IO.Path;
 using Process = System.Diagnostics.Process;
@@ -228,7 +231,7 @@ public static class ColorMCAndroid
         Log.Info("Game Pipe", e.Data ?? "null");
     }
 
-    public static Process PhoneGameLaunch(GameSettingObj obj, JavaInfo jvm, List<string> list,
+    public static IGameHandel PhoneGameLaunch(LoginObj login, GameSettingObj obj, JavaInfo jvm, List<string> list,
    Dictionary<string, string> env)
     {
         AndroidHelper.Main.Post(() =>
@@ -283,7 +286,7 @@ public static class ColorMCAndroid
 
         Activity.Update();
 
-        return p;
+        return new PhoneHandel(login, obj, p);
     }
 
     private static void Game_GameReady(string uuid)
@@ -292,5 +295,65 @@ public static class ColorMCAndroid
         {
             Game.StartDisplay(uuid);
         });
+    }
+
+    public class PhoneHandel : IGameHandel
+    {
+        public string UUID { get; init; }
+
+        public bool IsExit => false;
+
+        public nint Handel => IntPtr.Zero;
+
+        public PhoneHandel(LoginObj login, GameSettingObj obj, Process process)
+        {
+            UUID = obj.UUID;
+
+            var use = true;
+            if (use)
+            {
+                process.StartInfo.RedirectStandardInput = true;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+
+                process.OutputDataReceived += (a, b) =>
+                {
+                    ColorMCCore.OnGameLog(obj, b.Data);
+                };
+                process.ErrorDataReceived += (a, b) =>
+                {
+                    ColorMCCore.OnGameLog(obj, b.Data);
+                };
+                process.Exited += (a, b) =>
+                {
+                    ColorMCCore.OnGameExit(obj, login, process.ExitCode);
+                    process.Dispose();
+                };
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+            }
+            else
+            {
+                var serviceIntent = new Intent(Activity, typeof(GameService));
+                serviceIntent.PutExtra("Args", process.StartInfo.ArgumentList.ToArray());
+                serviceIntent.PutExtra("Keys", process.StartInfo.Environment.Keys.ToArray());
+                serviceIntent.PutExtra("Values", process.StartInfo.Environment.Values.ToArray());
+
+                if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
+                {
+                    Activity.StartForegroundService(serviceIntent);
+                }
+                else
+                {
+                    Activity.StartService(serviceIntent);
+                }
+            }
+        }
+
+        public void Kill()
+        {
+            
+        }
     }
 }
