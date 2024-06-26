@@ -30,7 +30,6 @@ jobs:
       
     - name: Publish Android
       run: |
-          REF=$(echo $GITHUB_SHA | cut -c -7)
           sed -i "s|package=\"coloryr.colormc.android\"|package=\"coloryr.colormc.android\"|g" ColorMC.Android/Properties/AndroidManifest.xml
           sed -i "s|<string name=\"displayName\" translatable=\"false\">ColorMC</string>|<string name=\"displayName\" translatable=\"false\">ColorMC</string>|g" ColorMC.Android/Resources/values/strings.xml
 
