@@ -7,6 +7,7 @@ on:
   pull_request:
     branches: [ "test" ]
   workflow_dispatch:
+  push:
 
 env:
   FRAMEWORK: net8.0-android
@@ -27,11 +28,11 @@ jobs:
 
     - name: Publish Android
       run: |
-          sed -i "s|package=\"coloryr.colormc.android\"|package=\"coloryr.colormc.android\"|g" ColorMC.Android/Properties/AndroidManifest.xml
-          sed -i "s|<string name=\"displayName\" translatable=\"false\">ColorMC</string>|<string name=\"displayName\" translatable=\"false\">ColorMC</string>|g" ColorMC.Android/Resources/values/strings.xml
+          sed -i "s|package=\"coloryr.colormc.android\"|package=\"coloryr.colormc.android\"|g" src/ColorMC.Android/Properties/AndroidManifest.xml
+          sed -i "s|<string name=\"displayName\" translatable=\"false\">ColorMC</string>|<string name=\"displayName\" translatable=\"false\">ColorMC</string>|g" src/ColorMC.Android/Resources/values/strings.xml
 
-          dotnet publish -f:$FRAMEWORK -c:$CONFIGURATION --no-restore ColorMC.Android/ColorMC.Android.csproj
-          APK=$(find ColorMC.Android/bin/$CONFIGURATION/$FRAMEWORK/publish -name '*-Signed.apk')
+          dotnet publish -f:$FRAMEWORK -c:$CONFIGURATION --no-restore src/ColorMC.Android/ColorMC.Android.csproj
+          APK=$(find src/ColorMC.Android/bin/$CONFIGURATION/$FRAMEWORK/publish -name '*-Signed.apk')
           mv $APK "coloryr.colormc.android.apk"
           
     - name: 上传构建文件
