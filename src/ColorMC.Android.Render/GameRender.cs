@@ -1,4 +1,5 @@
 ﻿using Android.Graphics;
+using Android.Util;
 using System.Diagnostics;
 using System.Net.Sockets;
 
@@ -33,7 +34,7 @@ public class GameSock(string socketPath)
         {
             _socket.Connect(_socketPath);
 
-            RenderLog.Info("Game Sock", "Connected to the server.");
+            Log.Info("Game Sock", "Connected to the server.");
 
             new Thread(Read).Start();
 
@@ -41,7 +42,7 @@ public class GameSock(string socketPath)
         }
         catch (Exception e)
         {
-            RenderLog.Info("Game Sock", "connect fail wait...");
+            Log.Info("Game Sock", "connect fail wait...");
         }
 
         return false;
@@ -166,8 +167,7 @@ public class GameRender
     public enum RenderType
     {
         gl4es = 0,
-        angle = 1,
-        zink = 2
+        zink = 1
     }
 
     public enum DisplayType
@@ -245,8 +245,16 @@ public class GameRender
         };
         process.StartInfo.Environment.Add("GAME_SOCK", _game);
         process.StartInfo.Environment.Add("RENDER_SOCK", _render);
-        process.StartInfo.Environment.Add("GL_SO", gameRender.GetFileName());
-        process.StartInfo.Environment.Add("EGL_SO", "libEGL.so");
+        if (gameRender == RenderType.gl4es)
+        {
+            process.StartInfo.Environment.Add("GL_SO", gameRender.GetFileName());
+        }
+        else if (gameRender == RenderType.zink)
+        {
+            process.StartInfo.Environment.Add("MESA_SO", gameRender.GetFileName());
+            process.StartInfo.Environment.Add("MESA_GL_VERSION_OVERRIDE", "4.6");
+            process.StartInfo.Environment.Add("MESA_GLSL_VERSION_OVERRIDE", "460");
+        }
         process.StartInfo.Environment.Add("LIBGL_MIPMAP", "3");
         process.StartInfo.Environment.Add("LIBGL_NOERROR", "1");
         process.StartInfo.Environment.Add("LIBGL_NOINTOVLHACK", "1");
@@ -265,7 +273,7 @@ public class GameRender
         {
             TexId = GLHelper.CreateTexture();
         }
-        HaveTexture = RenderNative.BindTexture(TexId, buffer, 
+        HaveTexture = RenderNative.BindTexture(TexId, buffer,
             out var width, out var height, out texture);
         GameWidth = (ushort)width;
         GameHeight = (ushort)height;

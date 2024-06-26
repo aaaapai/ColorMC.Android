@@ -8,5 +8,6 @@
   -->	
 
 	<remove-node path="/api/package[contains(@name, 'org.tukaani')]" />
+	<remove-node path="/api/package[contains(@name, 'com.skydoves.colorpickerview')]" />
 	
 </metadata>

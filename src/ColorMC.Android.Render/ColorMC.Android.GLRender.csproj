@@ -9,10 +9,30 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="NativeLib\arm64-v8a\libawt_xawt.so" />
+    <None Remove="NativeLib\arm64-v8a\libgl4es_114.so" />
+    <None Remove="NativeLib\arm64-v8a\liblwjgl.so" />
+    <None Remove="NativeLib\arm64-v8a\liblwjgl_nanovg.so" />
+    <None Remove="NativeLib\arm64-v8a\liblwjgl_opengl.so" />
+    <None Remove="NativeLib\arm64-v8a\liblwjgl_stb.so" />
+    <None Remove="NativeLib\arm64-v8a\liblwjgl_tinyfd.so" />
+    <None Remove="NativeLib\arm64-v8a\libopenal.so" />
+    <None Remove="NativeLib\arm64-v8a\libOSMesa_8.so" />
     <None Remove="NativeLib\arm64-v8a\libunpack200.so" />
+    <None Remove="NativeLib\arm64-v8a\libvulkan_freedreno.so" />
+    <None Remove="NativeLib\x86_64\libawt_xawt.so" />
+    <None Remove="NativeLib\x86_64\libgl4es_114.so" />
+    <None Remove="NativeLib\x86_64\liblwjgl.so" />
+    <None Remove="NativeLib\x86_64\liblwjgl_nanovg.so" />
+    <None Remove="NativeLib\x86_64\liblwjgl_opengl.so" />
+    <None Remove="NativeLib\x86_64\liblwjgl_stb.so" />
+    <None Remove="NativeLib\x86_64\liblwjgl_tinyfd.so" />
+    <None Remove="NativeLib\x86_64\libopenal.so" />
+    <None Remove="NativeLib\x86_64\libOSMesa_8.so" />
+    <None Remove="NativeLib\x86_64\libunpack200.so" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ColorMC\src\ColorMC.Core\ColorMC.Core.csproj" />
+    <ProjectReference Include="..\..\ColorMC\src\ColorMC.Core\ColorMC.Core.csproj" />
   </ItemGroup>
 </Project>

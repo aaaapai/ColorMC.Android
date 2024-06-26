@@ -11,17 +11,18 @@
 #include "GL/gl.h"
 
 typedef struct {
-    EGLContext context;
+    void* context;
     GLuint fbo;
     GLuint texture;
     bool init;
+    void* share;
 } context_env;
 
 extern context_env *now_env;
 
 void context_list_init();
 context_env * context_find_empty();
-context_env * context_find_match(EGLContext context);
-void context_remove(EGLContext context);
+context_env * context_find_match(context_env* env);
+void context_remove(context_env* env);
 
 #endif //COLORMCNATIVE_CONTEXT_LIST_H

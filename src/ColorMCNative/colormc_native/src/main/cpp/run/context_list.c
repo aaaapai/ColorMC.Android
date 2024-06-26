@@ -39,10 +39,13 @@ context_env * context_find_empty() {
 /*
  * 找到指定的context
  */
-context_env * context_find_match(EGLContext context) {
+context_env * context_find_match(context_env * env) {
+    if(env == NULL) {
+        return NULL;
+    }
     pthread_mutex_lock(&mutex);
     for (int a = 0; a < ENV_COUNT; a++) {
-        if (env_list[a].context == context) {
+        if (&env_list[a] == env || env_list[a].context == env) {
             pthread_mutex_unlock(&mutex);
             return &env_list[a];
         }
@@ -55,14 +58,15 @@ context_env * context_find_match(EGLContext context) {
 /*
  * 删除context
  */
-void context_remove(EGLContext context) {
+void context_remove(context_env* env) {
     pthread_mutex_lock(&mutex);
     for (int a = 0; a < ENV_COUNT; a++) {
-        if (env_list[a].context == context) {
-            env_list[a].context = EGL_NO_CONTEXT;
+        if (&env_list[a] == env || env_list[a].context == env) {
+            env_list[a].context = NULL;
             env_list[a].fbo = 0;
             env_list[a].texture = 0;
             env_list[a].init = false;
+            env_list[a].share = NULL;
         }
     }
     pthread_mutex_unlock(&mutex);

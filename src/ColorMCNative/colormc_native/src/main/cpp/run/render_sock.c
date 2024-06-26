@@ -12,7 +12,7 @@
 #include <string.h>
 
 #include "render_sock.h"
-#include "run_shared_texture.h"
+#include "test/run_shared_texture.h"
 
 pthread_t render_tid;
 

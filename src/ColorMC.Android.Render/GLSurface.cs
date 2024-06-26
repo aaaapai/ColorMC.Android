@@ -1,6 +1,5 @@
 ﻿using Android.Content;
 using Android.Opengl;
-using Android.OS;
 using Android.Util;
 using Android.Views;
 using Javax.Microedition.Khronos.Opengles;
@@ -9,18 +8,16 @@ namespace ColorMC.Android.GLRender;
 
 public class GLSurface : GLSurfaceView, ISurfaceHolderCallback, GLSurfaceView.IRenderer, View.IOnTouchListener
 {
-    private readonly TapDetector _singleTapDetector;
     private readonly List<GameRender> displayList = [];
 
-    private QuadRenderer qrender;
+    private ImageRenderer qrender;
     private int renderWidth, renderHeight;
     private float XRenderRatio, YRenderRatio;
 
     public GameRender NowGame;
 
-    public GLSurface(Context? context, DisplayMetrics display) : base(context)
+    public GLSurface(Context? context) : base(context)
     {
-        _singleTapDetector = new(1, TapDetector.DelectionMethodBoth, display);
         SetEGLContextClientVersion(3);
         SetRenderer(this);
         SetOnTouchListener(this);
@@ -57,6 +54,11 @@ public class GLSurface : GLSurfaceView, ISurfaceHolderCallback, GLSurfaceView.IR
 
     public void OnDrawFrame(IGL10? gl)
     {
+        if (NowGame == null)
+        {
+            return;
+        }
+
         GLES20.GlViewport(0, 0, Width, Height);
         GLES20.GlClearColor(0, 0, 0, 0);
         GLES20.GlClear(GLES20.GlColorBufferBit);
@@ -75,7 +77,7 @@ public class GLSurface : GLSurfaceView, ISurfaceHolderCallback, GLSurfaceView.IR
                     out renderWidth, out renderHeight);
             }
         }
-        else if(NowGame.IsClose)
+        else if (NowGame.IsClose)
         {
             displayList.Remove(NowGame);
         }
@@ -142,6 +144,10 @@ public class GLSurface : GLSurfaceView, ISurfaceHolderCallback, GLSurfaceView.IR
 
     public bool OnTouch(View? v, MotionEvent? e)
     {
+        if (NowGame == null)
+        {
+            return false;
+        }
         // Looking for a mouse to handle, won't have an effect if no mouse exists.
         for (int i = 0; i < e.PointerCount; i++)
         {
@@ -167,17 +173,14 @@ public class GLSurface : GLSurfaceView, ISurfaceHolderCallback, GLSurfaceView.IR
                 return false;
             }
             //One android click = one MC click
-            if (_singleTapDetector.OnTouchEvent(e))
-            {
-                NowGame.MouseEvent(LwjglKeycode.GLFW_MOUSE_BUTTON_LEFT, true);
+            NowGame.MouseEvent(LwjglKeycode.GLFW_MOUSE_BUTTON_LEFT, true);
 
-                Task.Run(() =>
-                {
-                    Thread.Sleep(100);
-                    NowGame.MouseEvent(LwjglKeycode.GLFW_MOUSE_BUTTON_LEFT, false);
-                });
-                return true;
-            }
+            Task.Run(() =>
+            {
+                Thread.Sleep(100);
+                NowGame.MouseEvent(LwjglKeycode.GLFW_MOUSE_BUTTON_LEFT, false);
+            });
+            return true;
         }
 
         return true;
@@ -185,6 +188,11 @@ public class GLSurface : GLSurfaceView, ISurfaceHolderCallback, GLSurfaceView.IR
 
     public override bool DispatchCapturedPointerEvent(MotionEvent? e)
     {
+        if (NowGame == null)
+        {
+            return false;
+        }
+
         NowGame.MouseX += e.GetX() * XRenderRatio;
         NowGame.MouseY += e.GetX() * YRenderRatio;
 
