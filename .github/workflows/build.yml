@@ -27,12 +27,20 @@ jobs:
 
     - name: Restore NuGet packages
       run: dotnet restore
+      
+    - name: Publish Android
+      run: |
+          REF=$(echo $GITHUB_SHA | cut -c -7)
+          sed -i "s|package=\"coloryr.colormc.android\"|package=\"coloryr.colormc.android\"|g" ColorMC.Android/Properties/AndroidManifest.xml
+          sed -i "s|<string name=\"displayName\" translatable=\"false\">ColorMC</string>|<string name=\"displayName\" translatable=\"false\">ColorMC</string>|g" ColorMC.Android/Resources/values/strings.xml
 
-    - name: Build
-      run: dotnet build --no-restore
+          dotnet publish -f:$FRAMEWORK -c:$CONFIGURATION --no-restore ColorMC.Android/ColorMC.Android.csproj
+          APK=$(find ColorMC.Android/bin/$CONFIGURATION/$FRAMEWORK/publish -name '*-Signed.apk')
+          mv $APK "coloryr.colormc.android.apk"
+          
     - name: 上传构建文件
       uses: actions/upload-artifact@v4
       with:
         name: colormc
         path: |
-          *.apk
+          coloryr.colormc.android.apk
