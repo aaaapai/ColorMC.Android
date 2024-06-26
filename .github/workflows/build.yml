@@ -29,15 +29,13 @@ jobs:
     - name: Publish Android
       run: |
           sed -i "s|package=\"coloryr.colormc.android\"|package=\"coloryr.colormc.android\"|g" src/ColorMC.Android/Properties/AndroidManifest.xml
-          sed -i "s|<string name=\"displayName\" translatable=\"false\">ColorMC</string>|<string name=\"displayName\" translatable=\"false\">ColorMC</string>|g" src/ColorMC.Android/Resources/values/strings.xml
+          sed -i "s|<string name=\"displayName\" translatable=\"false\">ColorMC</string>|<string name=\"displayName\" translatable=\"false\">ColorMC</string>|g" src/ColorMC.Android/Resources/values/string.xml
 
           dotnet publish -f:$FRAMEWORK -c:$CONFIGURATION --no-restore src/ColorMC.Android/ColorMC.Android.csproj
-          APK=$(find src/ColorMC.Android/bin/$CONFIGURATION/$FRAMEWORK/publish -name '*-Signed.apk')
-          mv $APK "coloryr.colormc.android.apk"
           
     - name: 上传构建文件
       uses: actions/upload-artifact@v4
       with:
         name: colormc
         path: |
-          coloryr.colormc.android.apk
+          *.apk
