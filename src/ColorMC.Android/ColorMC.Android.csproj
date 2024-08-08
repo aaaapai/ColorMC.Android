@@ -10,8 +10,8 @@
     <AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
     <SupportedOSPlatformVersion>28.0</SupportedOSPlatformVersion>
     <IsPublishable>True</IsPublishable>
-	<RuntimeIdentifiers>android-x64</RuntimeIdentifiers>
-	<!--<RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>-->
+	<!--<RuntimeIdentifiers>android-x64</RuntimeIdentifiers>-->
+	<RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>
 	<AndroidManifestMerger>manifestmerger.jar</AndroidManifestMerger>
   </PropertyGroup>
 
@@ -86,15 +86,13 @@
 
   <ItemGroup>
     <PackageReference Include="Avalonia.Android" Version="11.1.1" />
-	  <PackageReference Include="Xamarin.AndroidX.Activity" Version="1.9.0.1" />
-	  <PackageReference Include="Xamarin.AndroidX.AppCompat" Version="1.6.1.8" />
-	  <PackageReference Include="Xamarin.AndroidX.Compose.UI.ViewBinding" Version="1.6.6.1" />
-	  <PackageReference Include="Xamarin.AndroidX.Core" Version="1.13.0.1" />
-	  <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.7" />
-	  <PackageReference Include="Xamarin.AndroidX.GridLayout" Version="1.0.0.24" />
-	  <PackageReference Include="Xamarin.AndroidX.Preference" Version="1.2.1.5" />
-	  <PackageReference Include="Xamarin.AndroidX.ViewPager2" Version="1.0.0.26" />
-	  <PackageReference Include="Xamarin.Google.Android.Material" Version="1.10.0.4" /> 
+    <PackageReference Include="Xamarin.AndroidX.Activity" Version="1.9.1" />
+    <PackageReference Include="Xamarin.AndroidX.AppCompat" Version="1.7.0.1" />
+    <PackageReference Include="Xamarin.AndroidX.Core" Version="1.13.1.3" />
+	<PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.10" />
+	<PackageReference Include="Xamarin.AndroidX.GridLayout" Version="1.0.0.27" />
+	<PackageReference Include="Xamarin.AndroidX.ViewPager2" Version="1.1.0.1" />
+	<PackageReference Include="Xamarin.Google.Android.Material" Version="1.11.0.1" />
   </ItemGroup>	
 
   <ItemGroup>
