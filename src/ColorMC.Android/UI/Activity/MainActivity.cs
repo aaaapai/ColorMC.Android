@@ -3,6 +3,7 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
+using Avalonia;
 using Avalonia.Android;
 using Avalonia.Controls;
 using Avalonia.Threading;
@@ -11,6 +12,7 @@ using ColorMC.Android.GLRender;
 using ColorMC.Core;
 using ColorMC.Gui;
 using ColorMC.Gui.Manager;
+using System;
 using System.IO;
 using System.Linq;
 using Uri = Android.Net.Uri;
@@ -30,6 +32,11 @@ public class MainActivity : AvaloniaMainActivity<App>
         base.OnDestroy();
 
         App.Close();
+    }
+
+    protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
+    {
+        return base.CustomizeAppBuilder(builder);
     }
 
     protected override void OnCreate(Bundle savedInstanceState)
@@ -52,7 +59,14 @@ public class MainActivity : AvaloniaMainActivity<App>
         ColorMCGui.StartPhone(ColorMCAndroid.ExternalFilesDir + "/");
         PhoneConfigUtils.Init(ColorMCCore.BaseDir);
 
-        base.OnCreate(savedInstanceState);
+        try
+        {
+            base.OnCreate(savedInstanceState);
+        }
+        catch (Exception e)
+        { 
+            
+        }
 
         ResourceUnPack.StartUnPack(this);
 
