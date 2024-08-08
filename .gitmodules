@@ -1,3 +1,6 @@
 [submodule "ColorMC"]
 	path = ColorMC
 	url = https://github.com/Coloryr/ColorMC.git
+[submodule "Pojav-Glow-Worm"]
+	path = Pojav-Glow-Worm
+	url = https://github.com/Coloryr/Pojav-Glow-Worm.git
