@@ -4,14 +4,14 @@
     <TargetFramework>net8.0-android</TargetFramework>
     <Nullable>enable</Nullable>
     <ApplicationId>com.coloryr.colormc.android</ApplicationId>
-    <ApplicationVersion>35</ApplicationVersion>
-    <ApplicationDisplayVersion>24.4.7</ApplicationDisplayVersion>
+    <ApplicationVersion>36</ApplicationVersion>
+    <ApplicationDisplayVersion>24.8.8</ApplicationDisplayVersion>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
     <AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
     <SupportedOSPlatformVersion>28.0</SupportedOSPlatformVersion>
     <IsPublishable>True</IsPublishable>
-	<RuntimeIdentifiers>android-x64</RuntimeIdentifiers>
-	<!--<RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>-->
+	<!--<RuntimeIdentifiers>android-x64</RuntimeIdentifiers>-->
+	<RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>
 	<AndroidManifestMerger>manifestmerger.jar</AndroidManifestMerger>
   </PropertyGroup>
 
@@ -64,7 +64,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|anycpu'">
     <AndroidUseAapt2>True</AndroidUseAapt2>
     <Debugger>Xamarin</Debugger>
-    <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+    <AndroidCreatePackagePerAbi>True</AndroidCreatePackagePerAbi>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
     <IsTrimmable>True</IsTrimmable>
@@ -74,7 +74,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|anycpu'">
     <AndroidUseAapt2>True</AndroidUseAapt2>
     <Debugger>Xamarin</Debugger>
-    <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+    <AndroidCreatePackagePerAbi>True</AndroidCreatePackagePerAbi>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
     <IsTrimmable>True</IsTrimmable>
     <IsAotCompatible>True</IsAotCompatible>

@@ -10,6 +10,7 @@ using ColorMC.Android.GameButton;
 using ColorMC.Android.GLRender;
 using ColorMC.Core;
 using ColorMC.Gui;
+using ColorMC.Gui.Manager;
 using System.IO;
 using System.Linq;
 using Uri = Android.Net.Uri;
@@ -60,7 +61,7 @@ public class MainActivity : AvaloniaMainActivity<App>
 
     private void MainActivity_BackRequested(object? sender, AndroidBackRequestedEventArgs e)
     {
-        if (App.AllWindow is { } window)
+        if (Gui.Manager.WindowManager.AllWindow is { } window)
         {
             window.Model.BackClick();
             e.Handled = true;
@@ -113,7 +114,7 @@ public class MainActivity : AvaloniaMainActivity<App>
     {
         Dispatcher.UIThread.Post(() =>
         {
-            if (App.AllWindow is { } win)
+            if (Gui.Manager.WindowManager.AllWindow is { } win)
             {
                 if (ColorMCAndroid.Games.Count > 0)
                 {
