@@ -44,8 +44,8 @@ public static class ColorMCAndroid
         ColorMCCore.PhoneGetDataDir = PhoneGetDataDir;
         ColorMCCore.PhoneJvmRun = PhoneJvmRun;
         ColorMCCore.PhoneGameLaunch = PhoneGameLaunch;
-        ColorMCCore.GetFreePort = GetFreePort;
 
+        ColorMCGui.PhoneGetFreePort = GetFreePort;
         ColorMCGui.PhoneGetFrp = PhoneGetFrp;
     }
 
@@ -234,6 +234,15 @@ public static class ColorMCAndroid
     public static IGameHandel PhoneGameLaunch(LoginObj login, GameSettingObj obj, JavaInfo jvm, List<string> list,
    Dictionary<string, string> env)
     {
+        if (PhoneConfigUtils.Config.GameRender == GameRenderBG.Pojav)
+        {
+            var intent = new Intent("ColorMC.Android.Game");
+            //加入参数，传递给AnotherActivity
+            intent.PutExtra("data","我是传过来的参数");
+            Activity.StartActivity(intent);　
+
+            return new PojavHandel(obj);
+        }
         AndroidHelper.Main.Post(() =>
         {
             var intent = new Intent(Activity, typeof(GameActivity));
@@ -295,6 +304,20 @@ public static class ColorMCAndroid
         {
             Game.StartDisplay(uuid);
         });
+    }
+
+    public class PojavHandel(GameSettingObj obj) : IGameHandel
+    {
+        public string UUID => obj.UUID;
+
+        public bool IsExit => false;
+
+        public nint Handel => IntPtr.Zero;
+
+        public void Kill()
+        {
+            
+        }
     }
 
     public class PhoneHandel : IGameHandel

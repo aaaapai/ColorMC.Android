@@ -1,7 +1,6 @@
 using ColorMC.Core.Config;
 using ColorMC.Core.Helpers;
 using ColorMC.Core.Utils;
-using ColorMC.Gui.Objs;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -97,41 +96,6 @@ public static class PhoneConfigUtils
             Local = s_local,
             Obj = Config
         });
-    }
-
-    public static StyleSetting MakeStyleSettingConfig()
-    {
-        return new()
-        {
-            ButtonCornerRadius = 3,
-            AmTime = 500
-        };
-    }
-
-    public static Live2DSetting MakeLive2DConfig()
-    {
-        return new()
-        {
-            Width = 30,
-            Height = 50
-        };
-    }
-
-    public static Render MakeRenderConfig()
-    {
-        return new()
-        {
-            Windows = new()
-            {
-                ShouldRenderOnUIThread = null
-            },
-            X11 = new()
-            {
-                UseDBusMenu = null,
-                UseDBusFilePicker = null,
-                OverlayPopups = null
-            }
-        };
     }
 
     public static PhoneConfigObj MakeDefaultConfig()

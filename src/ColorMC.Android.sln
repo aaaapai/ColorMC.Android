@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ColorMC.Android.GLRender", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{CD48B1C6-4318-4E67-A311-FB96CA0E7504}"
 	ProjectSection(SolutionItems) = preProject
-		ColorMC\src\Directory.Build.props = ColorMC\src\Directory.Build.props
+		..\ColorMC\src\Directory.Build.props = ..\ColorMC\src\Directory.Build.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ColorMC.Gui", "..\ColorMC\src\ColorMC.Gui\ColorMC.Gui.csproj", "{AA820B22-AFEE-48FC-9DBF-58342CA682BE}"
